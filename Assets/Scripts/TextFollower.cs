@@ -7,12 +7,12 @@ public class TextFollower : MonoBehaviour
     [SerializeField] TMP_Text textDisplay;
     [SerializeField] TMP_Text scoreText;
     [SerializeField] float letterTimeLimit = 2f;
+    [SerializeField] ItemActivator itemActivator;
 
     string targetText;
     int score = 0;
     int currentLetterIndex = 0;
     float letterTimer = 0f;
-    bool awaitingInput = true;
 
     const int htmlCodeOffset = 23;    // <color=#RRGGBB></color> - 23 characters
 
@@ -26,12 +26,12 @@ public class TextFollower : MonoBehaviour
     {
         letterTimer += Time.deltaTime;
 
-        if (letterTimer >= letterTimeLimit && awaitingInput)
+        if (letterTimer >= letterTimeLimit)
         {
             MissedLetter();
         }
 
-        if (awaitingInput && Input.anyKeyDown)
+        if (itemActivator.IsActivated && Input.anyKeyDown)
         {
             foreach (char c in Input.inputString)
             {
@@ -46,7 +46,6 @@ public class TextFollower : MonoBehaviour
 
     void CheckInput(char userInputLetter)
     {
-        awaitingInput = false;
         char correctLetter = targetText[currentLetterIndex];
 
         if (char.ToLower(userInputLetter) == char.ToLower(correctLetter))
@@ -63,7 +62,7 @@ public class TextFollower : MonoBehaviour
         }
 
         UpdateScoreText();
-        StartCoroutine(NextLetterDelay());
+        NextLetter();
     }
 
     string ReplaceWithColor(string text, int index, Color color)
@@ -86,19 +85,15 @@ public class TextFollower : MonoBehaviour
         score--;
         UpdateScoreText();
 
-        awaitingInput = false;
-        StartCoroutine(NextLetterDelay());
+        NextLetter();
     }
 
-    IEnumerator NextLetterDelay()
+    void NextLetter()
     {
-        yield return new WaitForSeconds(0.5f);
-
         currentLetterIndex++;
 
         if (currentLetterIndex < targetText.Length)
         {
-            awaitingInput = true;
             letterTimer = 0f;
         }
         else
