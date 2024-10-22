@@ -1,37 +1,44 @@
-using System.Collections;
+using System;
 using TMPro;
 using UnityEngine;
 
 public class TextFollower : MonoBehaviour
 {
-    [SerializeField] TMP_Text textDisplay;
-    [SerializeField] TMP_Text scoreText;
-    [SerializeField] float letterTimeLimit = 2f;
-    [SerializeField] ItemActivator itemActivator;
+    [SerializeField] TMP_Text                       textDisplay;
+    [SerializeField] float                          letterTimeLimit = 2f;
+    [SerializeField] UserInterfaceItemsActivator    textBoxActivator;
+    [SerializeField] int                            scoreModifierOnMiss = 1;
+    [SerializeField] int                            scoreModifier = 2;
 
-    string targetText;
-    int score = 0;
-    int currentLetterIndex = 0;
-    float letterTimer = 0f;
+    public Action<int> onScoreChanged;
 
-    const int htmlCodeOffset = 23;    // <color=#RRGGBB></color> - 23 characters
+    string  targetText;
+    int     currentLetterIndex = 0;
+    float   letterTimer = 0f;
+
+    const int singleHTMLInstructLength = 23;    // <color=#RRGGBB></color> - 23 characters
 
     void Start()
     {
+        // TODO: targetText load from a file
         targetText = textDisplay.text;
-        UpdateScoreText();
     }
 
     void Update()
     {
-        letterTimer += Time.deltaTime;
+        if (currentLetterIndex >= targetText.Length)
+        {
+            return;
+        }
 
+        letterTimer += Time.deltaTime;
         if (letterTimer >= letterTimeLimit)
         {
             MissedLetter();
         }
 
-        if (itemActivator.IsActivated && Input.anyKeyDown)
+        bool isFocusOnTextBox = textBoxActivator.IsCurrentlyActivated;
+        if (isFocusOnTextBox && Input.anyKeyDown)
         {
             foreach (char c in Input.inputString)
             {
@@ -46,33 +53,31 @@ public class TextFollower : MonoBehaviour
 
     void CheckInput(char userInputLetter)
     {
+        int score = 0;
         char correctLetter = targetText[currentLetterIndex];
 
         if (char.ToLower(userInputLetter) == char.ToLower(correctLetter))
         {
             textDisplay.text = ReplaceWithColor(textDisplay.text, currentLetterIndex, Color.green);
-            score++;
-            Debug.Log("git wpisane");
+            score = scoreModifier;
         }
         else
         {
             textDisplay.text = ReplaceWithColor(textDisplay.text, currentLetterIndex, Color.red);
-            score--;
-            Debug.Log("dupa");
+            score = -scoreModifier;
         }
 
-        UpdateScoreText();
+        onScoreChanged?.Invoke(score);
         NextLetter();
     }
 
     string ReplaceWithColor(string text, int index, Color color)
     {
-        int finalIndex = htmlCodeOffset * currentLetterIndex + index;
+        // all letters before the current letter are colored
+        int finalIndex = singleHTMLInstructLength * currentLetterIndex + index;
 
         string coloredText = text.Substring(0, finalIndex);
-
         coloredText += $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{text[finalIndex]}</color>";
-
         coloredText += text.Substring(finalIndex + 1);
 
         return coloredText;
@@ -80,30 +85,17 @@ public class TextFollower : MonoBehaviour
 
     void MissedLetter()
     {
-        Debug.Log("miss");
         textDisplay.text = ReplaceWithColor(textDisplay.text, currentLetterIndex, Color.black);
-        score--;
-        UpdateScoreText();
-
+        onScoreChanged?.Invoke(-scoreModifierOnMiss);
         NextLetter();
     }
 
     void NextLetter()
     {
-        currentLetterIndex++;
-
         if (currentLetterIndex < targetText.Length)
         {
+            currentLetterIndex++;
             letterTimer = 0f;
         }
-        else
-        {
-            Debug.Log("dupa koniec");
-        }
-    }
-
-    void UpdateScoreText()
-    {
-        scoreText.text = score.ToString();
     }
 }

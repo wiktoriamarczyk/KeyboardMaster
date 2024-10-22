@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3838189317019120218}
   - component: {fileID: 7273370114525882307}
   - component: {fileID: 7407998791201791047}
-  - component: {fileID: 9103484112270718790}
+  - component: {fileID: 8428817306769420246}
   m_Layer: 5
   m_Name: TextBox
   m_TagString: Untagged
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: 2, y: 0, z: 0, w: 0}
   m_Softness: {x: 0, y: 0}
---- !u!114 &9103484112270718790
+--- !u!114 &8428817306769420246
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 583117798589988015}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0a8eaca40ae1564c8b2a57eabcacf4c, type: 3}
+  m_Script: {fileID: 11500000, guid: 29f0f643b15694148bb74a3bec77a068, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   items:
@@ -307,7 +307,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lorem
+  m_text: Lorem ipsum dolor sit.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5adb1e97383f77747beda809b74183ad, type: 2}
   m_sharedMaterial: {fileID: 8139600726996652436, guid: 5adb1e97383f77747beda809b74183ad, type: 2}

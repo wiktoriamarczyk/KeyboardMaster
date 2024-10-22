@@ -3,22 +3,32 @@ using UnityEngine;
 
 public class InputFieldActivator : MonoBehaviour
 {
-    [SerializeField] TMP_InputField inputField;
-    [SerializeField] ItemActivator itemActivator;
+    [SerializeField] TMP_InputField                 inputField;
+    [SerializeField] UserInterfaceItemsActivator    itemActivator;
+    [SerializeField] bool                           clearOnStateChange = false;
 
     void Start()
     {
-        itemActivator.onActivated += OnActivated;
+        itemActivator.onActivationStateChange += OnActivationStateChange;
     }
 
-    void OnActivated(bool activated)
+    void OnActivationStateChange(bool activated)
     {
-        inputField.text = string.Empty;
-        inputField.interactable = activated;
-        if (activated)
-            inputField.ActivateInputField();
-        else
-        inputField.DeactivateInputField();
-    }
+        if (clearOnStateChange)
+        {
+            inputField.text = string.Empty;
+        }
 
+        inputField.interactable = activated;
+
+        if (activated)
+        {
+            inputField.ActivateInputField();
+        }
+        else
+        {
+            inputField.DeactivateInputField();
+        }
+
+    }
 }
