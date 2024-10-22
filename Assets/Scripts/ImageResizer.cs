@@ -4,9 +4,9 @@ using DG.Tweening;
 
 public class ImageResizer : MonoBehaviour
 {
-    [SerializeField] Image image;
-    [SerializeField] Vector2 endSize;
-    [SerializeField] float animationDuration;
+    [SerializeField] Image      image;
+    [SerializeField] Vector2    endSize;
+    [SerializeField] float      animationDuration;
 
     Vector2 startSize;
 

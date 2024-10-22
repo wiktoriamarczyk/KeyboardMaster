@@ -13,10 +13,10 @@ public class PlayerHealthController : MonoBehaviour
     {
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
-        textFollower.onScoreChanged += OnTextScoreChanged;
+        textFollower.onScoreChanged += OnTextFollowerScoreChanged;
     }
 
-    void OnTextScoreChanged(int score)
+    void OnTextFollowerScoreChanged(int score)
     {
         if (score > 0)
         {

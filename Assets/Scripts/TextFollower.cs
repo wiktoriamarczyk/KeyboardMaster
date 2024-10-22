@@ -16,7 +16,8 @@ public class TextFollower : MonoBehaviour
     int     currentLetterIndex = 0;
     float   letterTimer = 0f;
 
-    const int singleHTMLInstructLength = 23;    // <color=#RRGGBB></color> - 23 characters
+    // <color=#RRGGBB></color> - 23 characters
+    const int singleHTMLInstructLength = 23;
 
     void Start()
     {
@@ -85,7 +86,7 @@ public class TextFollower : MonoBehaviour
 
     void MissedLetter()
     {
-        textDisplay.text = ReplaceWithColor(textDisplay.text, currentLetterIndex, Color.black);
+        textDisplay.text = ReplaceWithColor(textDisplay.text, currentLetterIndex, Color.gray);
         onScoreChanged?.Invoke(-scoreModifierOnMiss);
         NextLetter();
     }
