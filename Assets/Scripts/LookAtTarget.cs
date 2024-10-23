@@ -1,7 +1,9 @@
 using UnityEngine;
+
 public class LookAtTarget : MonoBehaviour
 {
     [SerializeField] GameObject target;
+
     float turnSpeed = 2f;
 
     void Update() {
