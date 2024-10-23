@@ -7,6 +7,9 @@ public class InputFieldActivator : MonoBehaviour
     [SerializeField] UserInterfaceItemsActivator    itemActivator;
     [SerializeField] bool                           clearOnStateChange = false;
 
+    public bool IsActivated => isActivated;
+    bool isActivated = false;
+
     void Start()
     {
         itemActivator.onActivationStateChange += OnActivationStateChange;
@@ -14,12 +17,13 @@ public class InputFieldActivator : MonoBehaviour
 
     void OnActivationStateChange(bool activated)
     {
+        isActivated = activated;
+        inputField.interactable = activated;
+
         if (clearOnStateChange)
         {
             inputField.text = string.Empty;
         }
-
-        inputField.interactable = activated;
 
         if (activated)
         {

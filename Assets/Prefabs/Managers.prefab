@@ -188,7 +188,7 @@ MonoBehaviour:
   letterTimeLimit: 2
   textBoxActivator: {fileID: 0}
   scoreModifierOnMiss: 1
-  scoreModifier: 1
+  scoreModifier: 2
 --- !u!1 &5605642420647182505
 GameObject:
   m_ObjectHideFlags: 0
