@@ -48,7 +48,7 @@ public class TextCrawler : MonoBehaviour
 
     IEnumerator SwitchObjectsAfterDelay()
     {
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(4.5f);
 
         if (objectBeginning != null)
         {
