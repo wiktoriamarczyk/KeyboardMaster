@@ -4,29 +4,32 @@ using UnityEngine;
 
 public static class CommandSet
 {
-    static Dictionary<string, Action> commands = new Dictionary<string, Action>();
+    static Dictionary<string, List<Action>> commands = new Dictionary<string, List<Action>>();
 
-    public static void AddCommand(string commandCode, Action action)
+    public static void AddCommand(string commandCode, List<Action> actions)
     {
         if (!commands.ContainsKey(commandCode))
         {
-            commands.Add(commandCode, action);
+            commands[commandCode] = new List<Action>();
         }
-        else
+        foreach (var action in actions)
         {
-            commands[commandCode] = action;
+            commands[commandCode].Add(action);
         }
     }
 
     public static void ExecuteCommand(string commandCode)
     {
-        if (commands.TryGetValue(commandCode, out Action action))
+        if (commands.TryGetValue(commandCode, out List<Action> actions))
         {
             Debug.Log(string.Format("<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",
                 (byte)(Color.green.r * 255f), (byte)(Color.green.g * 255f), (byte)(Color.green.b * 255f),
                 $"Executing command: '{commandCode}'"));
 
-            action.Invoke();
+            foreach (var action in actions)
+            {
+                action.Invoke();
+            }
         }
         else
         {

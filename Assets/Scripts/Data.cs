@@ -2,9 +2,10 @@ using System.Collections.Generic;
 
 public static class Data
 {
-    public enum PlayerState
+    public enum AnimationState
     {
         Idle,
+        RegularAttack,
         AttackFireball,
         AttackLightning,
         Defending,
@@ -13,16 +14,17 @@ public static class Data
         Dying
     }
 
-    public static Dictionary<PlayerState, string> playerStates => states;
+    public static Dictionary<AnimationState, string> animationStates => states;
 
-    static Dictionary<PlayerState, string> states = new()
+    static Dictionary<AnimationState, string> states = new()
     {
-        { PlayerState.Idle, "idle" },
-        { PlayerState.AttackFireball, "attack fireball" },
-        { PlayerState.AttackLightning, "attack lightning" },
-        { PlayerState.Defending, "defend" },
-        { PlayerState.DrinkingPotion, "drink potion" },
-        { PlayerState.GettingHit, "get hit" },
-        { PlayerState.Dying, "dead" }
+        { AnimationState.Idle, "idle" },
+        { AnimationState.RegularAttack, "attack" },
+        { AnimationState.AttackFireball, "fireball" },
+        { AnimationState.AttackLightning, "light" },
+        { AnimationState.Defending, "defend" },
+        { AnimationState.DrinkingPotion, "drink potion" },
+        { AnimationState.GettingHit, "get hit" },
+        { AnimationState.Dying, "dead" }
     };
 }

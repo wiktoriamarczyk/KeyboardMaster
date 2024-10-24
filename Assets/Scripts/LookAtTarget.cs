@@ -4,6 +4,8 @@ public class LookAtTarget : MonoBehaviour
 {
     [SerializeField] GameObject target;
 
+    public GameObject Target => target;
+
     float turnSpeed = 2f;
 
     void Update() {

@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using System.IO;
 
 public class TextFollower : MonoBehaviour
 {
@@ -23,6 +24,15 @@ public class TextFollower : MonoBehaviour
     {
         // TODO: targetText load from a file
         targetText = textDisplay.text;
+    }
+
+    void LoadTextFromFile(string path)
+    {
+        if (path == null)
+        {
+            return;
+        }
+        targetText = File.ReadAllText(path);
     }
 
     void Update()
