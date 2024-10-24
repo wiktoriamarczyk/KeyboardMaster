@@ -1,12 +1,15 @@
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 public class XBOXWeapon : Weapon
 {
     [SerializeField] Rigidbody rb;
 
-    const float lifeTime = 10f;
-    const float speed = 10;
+    const float lifeTime = 8f;
+    const float speed = 11;
+    const float animationDuration = 0.2f;
+    const float bounceForce = 1f;
 
     void Start()
     {
@@ -16,16 +19,21 @@ public class XBOXWeapon : Weapon
     public void Throw(Vector3 target)
     {
         Vector3 direction = (target - transform.position).normalized;
-        rb.AddForce(Vector3.forward * speed, ForceMode.Impulse);
+        rb.AddForce(direction * speed, ForceMode.Impulse);
     }
 
     IEnumerator DestroyAfterTime()
     {
         yield return new WaitForSeconds(lifeTime);
-        Destroy(gameObject);
+        transform.DOScale(0, animationDuration).OnComplete(() => Destroy(gameObject));
     }
 
-    private void OnDestroy()
+    void OnCollisionEnter(Collision collision)
+    {
+        rb.AddForce(Vector3.up * bounceForce, ForceMode.Impulse);
+    }
+
+    void OnDestroy()
     {
         StopAllCoroutines();
     }

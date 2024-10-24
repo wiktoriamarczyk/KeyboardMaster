@@ -5,7 +5,7 @@ public class Player : Creature
 {
     [SerializeField] TextFollower textFollower;
 
-    const float onTextMissedPenalty = 10;
+    const float onTextMissedPenalty = 2;
 
     override protected void Start()
     {
@@ -49,7 +49,7 @@ public class Player : Creature
         UpdateHealth(onTextMissedPenalty * Mathf.Abs(score));
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         var weapon = collision.gameObject.GetComponent<Weapon>();
         if (weapon != null)
