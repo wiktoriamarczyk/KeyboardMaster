@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using System.IO;
+using System.Text.RegularExpressions;
 
 public class TextFollower : MonoBehaviour
 {
@@ -14,16 +15,19 @@ public class TextFollower : MonoBehaviour
     public Action<int> onScoreChanged;
 
     string  targetText;
+    string  currentText;
     int     currentLetterIndex = 0;
     float   letterTimer = 0f;
+    Regex   regex = new Regex(@"^[a-zA-Z0-9\W]$");
 
     // <color=#RRGGBB></color> - 23 characters
     const int singleHTMLInstructLength = 23;
+    const string wordsFile = "Assets/words-list.txt";
 
     void Start()
     {
-        // TODO: targetText load from a file
-        targetText = textDisplay.text;
+        LoadTextFromFile(wordsFile);
+        currentText = textDisplay.text = targetText;
     }
 
     void LoadTextFromFile(string path)
@@ -32,12 +36,12 @@ public class TextFollower : MonoBehaviour
         {
             return;
         }
-        targetText = File.ReadAllText(path);
+        targetText = File.ReadAllText(path).ToLower();
     }
 
     void Update()
     {
-        if (currentLetterIndex >= targetText.Length)
+        if (currentLetterIndex >= currentText.Length)
         {
             return;
         }
@@ -53,7 +57,7 @@ public class TextFollower : MonoBehaviour
         {
             foreach (char c in Input.inputString)
             {
-                if (char.IsLetter(c) || c == ' ')
+                if (regex.IsMatch(c.ToString()) || c == ' ')
                 {
                     CheckInput(c);
                     break;
@@ -69,12 +73,10 @@ public class TextFollower : MonoBehaviour
 
         if (char.ToLower(userInputLetter) == char.ToLower(correctLetter))
         {
-            textDisplay.text = ReplaceWithColor(textDisplay.text, currentLetterIndex, Color.green);
             score = scoreModifier;
         }
         else
         {
-            textDisplay.text = ReplaceWithColor(textDisplay.text, currentLetterIndex, Color.red);
             score = -scoreModifier;
         }
 
@@ -96,16 +98,17 @@ public class TextFollower : MonoBehaviour
 
     void MissedLetter()
     {
-        textDisplay.text = ReplaceWithColor(textDisplay.text, currentLetterIndex, Color.gray);
         onScoreChanged?.Invoke(-scoreModifierOnMiss);
         NextLetter();
     }
 
     void NextLetter()
     {
-        if (currentLetterIndex < targetText.Length)
+        if (currentLetterIndex < currentText.Length)
         {
             currentLetterIndex++;
+            string newText = targetText.Substring(currentLetterIndex);
+            textDisplay.text = currentText = newText;
             letterTimer = 0f;
         }
     }

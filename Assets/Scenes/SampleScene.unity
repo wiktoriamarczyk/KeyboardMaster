@@ -589,6 +589,7 @@ Transform:
   - {fileID: 254569040}
   - {fileID: 963194228}
   - {fileID: 398996308}
+  - {fileID: 1224209116}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1165581310
@@ -694,6 +695,7 @@ MonoBehaviour:
   musicClips:
   - {fileID: 8300000, guid: 69c91d2cc112a504197a08e237cbd5b1, type: 3}
   - {fileID: 8300000, guid: 68a02f6ca15b18d4591daa1d40a7cfa5, type: 3}
+  fadeDuration: 1.5
 --- !u!4 &1224209116
 Transform:
   m_ObjectHideFlags: 0
@@ -702,12 +704,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1224209114}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1279, y: 589, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1142774566}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1224209117
 AudioSource:
@@ -1115,6 +1117,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 179488588121398443, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
+      propertyPath: textFollower
+      value: 
+      objectReference: {fileID: 1029287874}
     - target: {fileID: 1734257731413983863, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1153,6 +1159,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3084363413958138942, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108685972384765749, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3108685972384765749, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3962231811625111103, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
@@ -1592,4 +1606,3 @@ SceneRoots:
   - {fileID: 1174571392314226548}
   - {fileID: 4967787534350495860}
   - {fileID: 1165581310}
-  - {fileID: 1224209116}
