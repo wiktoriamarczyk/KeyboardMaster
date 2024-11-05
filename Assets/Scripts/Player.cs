@@ -4,8 +4,10 @@ using static Data;
 public class Player : Creature
 {
     [SerializeField] TextFollower textFollower;
+    [SerializeField] Combo comboSystem;
 
     const float onTextMissedPenalty = 2;
+    float attackPower;
 
     override protected void Start()
     {
@@ -19,6 +21,7 @@ public class Player : Creature
     #region TriggerAnimations
     public void AttackFireball()
     {
+        comboSystem.IncrementCombo();
         animator.SetTrigger(animationStates[Data.AnimationState.AttackFireball]);
     }
 
@@ -55,6 +58,7 @@ public class Player : Creature
         if (weapon != null)
         {
             GetHit();
+            comboSystem.ResetCombo();
             UpdateHealth(weapon.Damage);
         }
     }

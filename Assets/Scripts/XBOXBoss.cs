@@ -7,10 +7,12 @@ public class XBOXBoss : Creature
     [SerializeField] GameObject     weaponPrefab;
     [SerializeField] GameObject     weaponHolder;
     [SerializeField] LookAtTarget   lookAtTarget;
+    [SerializeField] Combo comboSystem;
 
     GameObject spawnedWeapon;
 
-    const float fireballDamage = 10;
+    //const float fireballDamage = 10;
+    float fireballDamage;
     const float lightningDamage = 20;
     const float timeToAttack = 4f;
 
@@ -60,6 +62,7 @@ public class XBOXBoss : Creature
 
     void UpdateHealthFireball()
     {
+        fireballDamage = comboSystem.GetCurrentAttackPower();
         base.UpdateHealth(fireballDamage);
     }
 
