@@ -14,31 +14,42 @@ public class TextCrawler : MonoBehaviour
 
     void Start()
     {
-        lastPosition = transform.position;
-        StartCoroutine(SwitchObjectsAfterDelay());
+        if (objectBeginning != null && objectTitle != null) {
+            lastPosition = transform.position;
+            StartCoroutine(SwitchObjectsAfterDelay());
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (IsObjectActive(objectTitle))
+        if (objectBeginning != null && objectTitle != null)
         {
-            transform.Translate(Camera.main.transform.forward * _scrollSpeed * Time.deltaTime);
-
-            float distanceToCamera = Vector3.Distance(transform.position, Camera.main.transform.position);
-
-            if (distanceToCamera > deactivateDistance)
+            if (IsObjectActive(objectTitle))
             {
-                objectTitle.SetActive(false);
-                Debug.Log(objectTitle.name + " zosta³ dezaktywowany z powodu odleg³oœci.");
-                RestorePosition();
-                objectStory.SetActive(true);
+                transform.Translate(Camera.main.transform.forward * _scrollSpeed * Time.deltaTime);
+
+                float distanceToCamera = Vector3.Distance(transform.position, Camera.main.transform.position);
+
+                if (distanceToCamera > deactivateDistance)
+                {
+                    objectTitle.SetActive(false);
+                    Debug.Log(objectTitle.name + " zosta³ dezaktywowany z powodu odleg³oœci.");
+                    RestorePosition();
+                    objectStory.SetActive(true);
+                }
             }
         }
-
-        if (IsObjectActive(objectStory)) {
-            transform.Translate(Camera.main.transform.up * _scrollSpeed * Time.deltaTime);
+        else
+        {
+            objectStory.SetActive(true);
         }
+
+        if (IsObjectActive(objectStory))
+        {
+                transform.Translate(Camera.main.transform.up * _scrollSpeed * Time.deltaTime);
+        }
+        
     }
 
     public bool IsObjectActive(GameObject nameOfObject)

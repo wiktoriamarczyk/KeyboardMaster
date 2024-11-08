@@ -639,6 +639,7 @@ MonoBehaviour:
   musicSource: {fileID: 1391902919}
   musicClips:
   - {fileID: 8300000, guid: 34a3d22e25f87234786a2608a511ec6b, type: 3}
+  fadeDuration: 1.5
 --- !u!4 &1391902921
 Transform:
   m_ObjectHideFlags: 0
@@ -811,7 +812,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -195}
-  m_SizeDelta: {x: 500, y: 50}
+  m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1849480366
 MonoBehaviour:
@@ -833,10 +834,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: K E Y B O A R D    M A S T E R S
+  m_text: "K E Y B O A R D   \n M A S T E R S"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 35ff826e7bb7c62489ccaf282d9504c9, type: 2}
-  m_sharedMaterial: {fileID: 3110669279061747841, guid: 35ff826e7bb7c62489ccaf282d9504c9, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d6bdcb27f5546fe47bc81dd0bc54531d, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: eeedde52e8031b84e98acfddec026733, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -860,8 +861,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 120
+  m_fontSizeBase: 120
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -936,7 +937,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2029070281}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -944,7 +945,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -950}
+  m_AnchoredPosition: {x: 0, y: -938}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2029070283
