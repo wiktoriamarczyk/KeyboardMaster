@@ -13,7 +13,8 @@ public class XBOXBoss : Creature
 
     //const float fireballDamage = 10;
     float fireballDamage;
-    const float lightningDamage = 20;
+    //const float lightningDamage = 20;
+    float lightningDamage;
     const float timeToAttack = 4f;
 
     override protected void Start()
@@ -68,6 +69,7 @@ public class XBOXBoss : Creature
 
     void UpdateHealthLightning()
     {
+        lightningDamage =comboSystem.GetCurrentAttackPower();
         base.UpdateHealth(lightningDamage);
     }
 
