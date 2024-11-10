@@ -17,8 +17,8 @@ public class Player : Creature
     [SerializeField, ReadOnly] private float remainingLightningTime = 0f;
     private bool isImmune = false;
 
-    [SerializeField] private float fireballCooldown = 3f;  
-    [SerializeField] private float lightningCooldown = 5f;
+    [SerializeField] private float fireballCooldown = 10f;  
+    [SerializeField] private float lightningCooldown = 15f;
 
     private bool canFire = true;
     private bool canLight = true;
@@ -35,24 +35,23 @@ public class Player : Creature
     #region TriggerAnimations
     public void AttackFireball()
     {
-        if (canFire)
+        if (timer.IsReady(0))
         {
             comboSystem.IncrementCombo();
             animator.SetTrigger(animationStates[Data.AnimationState.AttackFireball]);
-            timer.StartTimer(fireballCooldown);
-            //StartCoroutine(Cooldown(canFire, remainingFireballTime));
-            ActivateFireballWait();
+            timer.StartTimer(fireballCooldown, 0);
         }
-
-
     }
 
     public void AttackLightning()
     {
-        comboSystem.IncrementCombo();
-        comboSystem.IncrementCombo();
-        animator.SetTrigger(animationStates[Data.AnimationState.AttackLightning]);
-
+        if (timer.IsReady(1))
+        {
+            comboSystem.IncrementCombo();
+            comboSystem.IncrementCombo();
+            animator.SetTrigger(animationStates[Data.AnimationState.AttackLightning]);
+            timer.StartTimer(lightningCooldown, 1);
+        }
     }
 
     public void Defend()
@@ -67,16 +66,6 @@ public class Player : Creature
     }
     #endregion
 
-    void ActivateFireballWait()
-    {
-        if (canFire)
-        {
-            canFire = false;
-            remainingFireballTime = fireballCooldown;
-            StartCoroutine(Cooldown());
-        }
-    }
-
     void ActivateImmunity()
     {
         if (!isImmune)
@@ -85,18 +74,6 @@ public class Player : Creature
             remainingImmunityTime = immunityDuration;
             StartCoroutine(ImmunityCooldown());
         }
-    }
-
-    private IEnumerator Cooldown()
-    {
-        while (remainingFireballTime > 0)
-        {
-            remainingFireballTime -= Time.deltaTime; 
-            yield return null; 
-        }
-
-        remainingFireballTime = 0;
-        canFire = true; 
     }
 
     private IEnumerator ImmunityCooldown()
