@@ -38,12 +38,12 @@ public class Timers : MonoBehaviour
             case 2:
                 remainingDrinkTime = cooldownDuration;
                 isDrinkRunning = true;
-                ActivateTimerText(timerDrink, "Potion Cooldown: ");
+                ActivateTimerText(timerDrink, "Drink potion Cooldown: ");
                 break;
             case 3:
                 remainingDefendTime = cooldownDuration;
                 isDefendRunning = true;
-                ActivateTimerText(timerDefend, "Defend Cooldown: ");
+                ActivateTimerText(timerDefend, "Defense active for: ");
                 break;
             default:
                 Debug.LogWarning("Nieprawid³owa wartoœæ timera.");

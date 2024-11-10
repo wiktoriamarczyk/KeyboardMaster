@@ -10,18 +10,15 @@ public class Player : Creature
     [SerializeField] private Timers timer;
 
     const float onTextMissedPenalty = 2;
+    const float potionHealingAmount = 50f;
 
     [SerializeField] private float immunityDuration = 5f; 
     [SerializeField, ReadOnly] private float remainingImmunityTime = 0f;
-    [SerializeField, ReadOnly] private float remainingFireballTime = 0f;
-    [SerializeField, ReadOnly] private float remainingLightningTime = 0f;
     private bool isImmune = false;
 
     [SerializeField] private float fireballCooldown = 10f;  
     [SerializeField] private float lightningCooldown = 15f;
-
-    private bool canFire = true;
-    private bool canLight = true;
+    [SerializeField] private float drinkingCooldown = 30f;
 
     override protected void Start()
     {
@@ -56,13 +53,22 @@ public class Player : Creature
 
     public void Defend()
     {
-        animator.SetTrigger(animationStates[Data.AnimationState.Defending]);
-        ActivateImmunity();
+        if (timer.IsReady(3))
+        {
+            animator.SetTrigger(animationStates[Data.AnimationState.Defending]);
+            ActivateImmunity();
+            timer.StartTimer(immunityDuration, 3);
+        }
+
     }
 
     public void DrinkPotion()
     {
-        animator.SetTrigger(animationStates[Data.AnimationState.DrinkingPotion]);
+        if (timer.IsReady(2)) { 
+            animator.SetTrigger(animationStates[Data.AnimationState.DrinkingPotion]);
+            Heal(potionHealingAmount);
+            timer.StartTimer(drinkingCooldown, 2);
+        }
     }
     #endregion
 
@@ -110,6 +116,14 @@ public class Player : Creature
             comboSystem.ResetCombo();
             UpdateHealth(weapon.Damage);
         }
+    }
+
+    void Heal(float amount)
+    {
+        // Przywróæ ¿ycie graczowi
+        currentHealth += amount;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth); // Upewnij siê, ¿e ¿ycie nie przekroczy maksymalnej wartoœci
+        healthBar.SetHealth(currentHealth / maxHealth); // Zaktualizuj pasek zdrowia
     }
 
     void InitializeCommands()
