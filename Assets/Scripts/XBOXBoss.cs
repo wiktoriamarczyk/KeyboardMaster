@@ -7,7 +7,8 @@ public class XBOXBoss : Creature
     [SerializeField] GameObject     weaponPrefab;
     [SerializeField] GameObject     weaponHolder;
     [SerializeField] LookAtTarget   lookAtTarget;
-    [SerializeField] Combo comboSystem;
+    [SerializeField] Combo          comboSystem;
+    [SerializeField] private Timers timer;
 
     GameObject spawnedWeapon;
 
@@ -63,14 +64,20 @@ public class XBOXBoss : Creature
 
     void UpdateHealthFireball()
     {
-        fireballDamage = comboSystem.GetCurrentAttackPower();
-        base.UpdateHealth(fireballDamage);
+        if (timer.IsReady(0))
+        {
+            fireballDamage = comboSystem.GetCurrentAttackPower();
+            base.UpdateHealth(fireballDamage);
+        }
     }
 
     void UpdateHealthLightning()
     {
-        lightningDamage =comboSystem.GetCurrentAttackPower();
-        base.UpdateHealth(lightningDamage);
+        if (timer.IsReady(1))
+        {
+            lightningDamage = comboSystem.GetCurrentAttackPower();
+            base.UpdateHealth(lightningDamage);
+        }
     }
 
     void OnDestroy()

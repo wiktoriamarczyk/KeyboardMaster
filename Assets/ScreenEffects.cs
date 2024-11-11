@@ -1,33 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScreenEffects : MonoBehaviour
 {
     [SerializeField] private float minInterval = 10f; // minimalny czas miêdzy efektami
     [SerializeField] private float maxInterval = 20f; // maksymalny czas miêdzy efektami
-    [SerializeField] private float shakeDuration = 3f; // czas trwania efektu trzêsienia
+    [SerializeField] private float shakeDuration = 5f; // czas trwania efektu trzêsienia
     [SerializeField] private float shakeIntensity = 0.2f; // intensywnoœæ trzêsienia
-    [SerializeField] private float blackoutDuration = 2f; // czas trwania efektu czarnego ekranu
-    [SerializeField] private GameObject blackoutPanel; // panel UI do efektu czarnego ekranu
+    [SerializeField] public float fadeDuration = 1f; // Czas trwania fade in i fade out
+    [SerializeField] public float waitTime = 2f;
+
+    [SerializeField] public Image blackScreenImage; // panel UI do efektu czarnego ekranu
 
     private Camera mainCamera;
     private Vector3 originalCameraPosition;
-    private CanvasGroup blackoutCanvasGroup;
 
     void Start()
     {
         mainCamera = Camera.main;
         originalCameraPosition = mainCamera.transform.position;
-
-        if (blackoutPanel != null)
+        if (blackScreenImage != null)
         {
-            blackoutCanvasGroup = blackoutPanel.GetComponent<CanvasGroup>();
-            if (blackoutCanvasGroup == null)
-            {
-                blackoutCanvasGroup = blackoutPanel.AddComponent<CanvasGroup>();
-            }
-            blackoutCanvasGroup.alpha = 0;
+            blackScreenImage.color = new Color(0, 0, 0, 0);  // Ustaw pocz¹tkow¹ przezroczystoœæ na 0
         }
 
         // Start losowego uruchamiania efektów
@@ -78,26 +74,29 @@ public class ScreenEffects : MonoBehaviour
 
     private IEnumerator Blackout()
     {
-        if (blackoutPanel != null)
+        if (blackScreenImage != null)
         {
-            yield return StartCoroutine(FadeCanvasGroup(blackoutCanvasGroup, 0, 1, blackoutDuration / 2));
-            yield return new WaitForSeconds(blackoutDuration);
-            // Wy³¹cz efekt przyciemnienia
-            yield return StartCoroutine(FadeCanvasGroup(blackoutCanvasGroup, 1, 0, blackoutDuration / 2));
-
+            yield return StartCoroutine(Fade(0, 1)); // Fade to black
+            yield return new WaitForSeconds(waitTime); // Wait in black screen
+            yield return StartCoroutine(Fade(1, 0)); // Fade back to normal
         }
     }
 
-    private IEnumerator FadeCanvasGroup(CanvasGroup canvasGroup, float startAlpha, float endAlpha, float duration)
+    private IEnumerator Fade(float startAlpha, float endAlpha)
     {
-        float time = 0;
-        while (time < duration)
+        float elapsedTime = 0f;
+        Color color = blackScreenImage.color;
+
+        while (elapsedTime < fadeDuration)
         {
-            canvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, time / duration);
-            time += Time.deltaTime;
+            color.a = Mathf.Lerp(startAlpha, endAlpha, elapsedTime / fadeDuration);
+            blackScreenImage.color = color;
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
-        canvasGroup.alpha = endAlpha;
+
+        color.a = endAlpha;
+        blackScreenImage.color = color;
     }
 }
 
