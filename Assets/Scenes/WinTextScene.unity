@@ -666,7 +666,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 1662188204}
   musicClips:
-  - {fileID: 8300000, guid: 34a3d22e25f87234786a2608a511ec6b, type: 3}
+  - {fileID: 8300000, guid: 201f8f3d0536b5e4e83a711e947a6142, type: 3}
   fadeDuration: 1.5
 --- !u!4 &1662188206
 Transform:

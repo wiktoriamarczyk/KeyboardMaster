@@ -20,6 +20,8 @@ public class Player : Creature
     [SerializeField] private float lightningCooldown = 15f;
     [SerializeField] private float drinkingCooldown = 30f;
 
+    [SerializeField] private AudioManager audioManager;
+
     override protected void Start()
     {
         base.Start();
@@ -33,6 +35,7 @@ public class Player : Creature
     public void BasicAttack()
     {
         animator.SetTrigger(animationStates[Data.AnimationState.RegularAttack]);
+        audioManager.PlayBasicAttackSound();
     }
     
     public void AttackFireball()
@@ -41,6 +44,7 @@ public class Player : Creature
         {
             comboSystem.IncrementCombo();
             animator.SetTrigger(animationStates[Data.AnimationState.AttackFireball]);
+            audioManager.PlayFireballAttackSound();
             timer.StartTimer(fireballCooldown, 0);
         }
     }
@@ -52,6 +56,7 @@ public class Player : Creature
             comboSystem.IncrementCombo();
             comboSystem.IncrementCombo();
             animator.SetTrigger(animationStates[Data.AnimationState.AttackLightning]);
+            audioManager.PlayLightningAttackSound();
             timer.StartTimer(lightningCooldown, 1);
         }
     }
@@ -62,6 +67,7 @@ public class Player : Creature
         {
             animator.SetTrigger(animationStates[Data.AnimationState.Defending]);
             ActivateImmunity();
+            audioManager.PlayPlayerDefenseSound();
             timer.StartTimer(immunityDuration, 3);
         }
 
@@ -71,6 +77,7 @@ public class Player : Creature
     {
         if (timer.IsReady(2)) { 
             animator.SetTrigger(animationStates[Data.AnimationState.DrinkingPotion]);
+            audioManager.PlayPlayerDrinkSound();
             Heal(potionHealingAmount);
             timer.StartTimer(drinkingCooldown, 2);
         }
@@ -120,6 +127,7 @@ public class Player : Creature
             GetHit();
             comboSystem.ResetCombo();
             UpdateHealth(weapon.Damage);
+            audioManager.PlayPlayerHitSound();
         }
     }
 

@@ -19,6 +19,8 @@ public class XBOXBoss : Creature
     float lightningDamage;
     const float timeToAttack = 4f;
 
+    [SerializeField] private AudioManager audioManager;
+
     override protected void Start()
     {
         base.Start();
@@ -33,6 +35,7 @@ public class XBOXBoss : Creature
             yield return new WaitForSeconds(timeToAttack);
             Debug.Log("Attacking");
             animator.SetTrigger(animationStates[Data.AnimationState.RegularAttack]);
+            audioManager.PlayEnemyAttackSound();
 
             yield return new WaitForSeconds(1f);
             spawnedWeapon = Instantiate(weaponPrefab, weaponHolder.transform);
@@ -67,6 +70,7 @@ public class XBOXBoss : Creature
     void UpdateHealthAttack()
     {
         base.UpdateHealth(attackDamage);
+        audioManager.PlayEnemyHitSound();
     }
     void UpdateHealthFireball()
     {
@@ -74,6 +78,7 @@ public class XBOXBoss : Creature
         {
             fireballDamage = comboSystem.GetCurrentAttackPower();
             base.UpdateHealth(fireballDamage);
+            audioManager.PlayEnemyHitSound();
         }
     }
 
@@ -83,6 +88,7 @@ public class XBOXBoss : Creature
         {
             lightningDamage = comboSystem.GetCurrentAttackPower();
             base.UpdateHealth(lightningDamage);
+            audioManager.PlayEnemyHitSound();
         }
     }
 
