@@ -8,7 +8,7 @@ public class Creature : MonoBehaviour
     [SerializeField] protected HealthBar    healthBar;
     [SerializeField] protected Animator     animator;
 
-    protected float currentHealth;
+    [SerializeField] protected float currentHealth;
     protected float maxHealth;
 
     private const float delayBeforeSceneLoad = 5f;

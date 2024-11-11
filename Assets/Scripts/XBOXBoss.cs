@@ -12,6 +12,7 @@ public class XBOXBoss : Creature
 
     GameObject spawnedWeapon;
 
+    float attackDamage = 1f;
     //const float fireballDamage = 10;
     float fireballDamage;
     //const float lightningDamage = 20;
@@ -58,10 +59,15 @@ public class XBOXBoss : Creature
 
     void InitializeCommands()
     {
+        CommandSet.AddCommand(animationStates[Data.AnimationState.RegularAttack], new() { GetHit, UpdateHealthAttack });
         CommandSet.AddCommand(animationStates[Data.AnimationState.AttackFireball], new() { GetHit, UpdateHealthFireball });
         CommandSet.AddCommand(animationStates[Data.AnimationState.AttackLightning], new() { GetHit, UpdateHealthLightning });
     }
 
+    void UpdateHealthAttack()
+    {
+        base.UpdateHealth(attackDamage);
+    }
     void UpdateHealthFireball()
     {
         if (timer.IsReady(0))
@@ -82,6 +88,7 @@ public class XBOXBoss : Creature
 
     void OnDestroy()
     {
+        CommandSet.RemoveCommand(animationStates[Data.AnimationState.RegularAttack]);
         CommandSet.RemoveCommand(animationStates[Data.AnimationState.AttackFireball]);
         CommandSet.RemoveCommand(animationStates[Data.AnimationState.AttackLightning]);
         StopAllCoroutines();

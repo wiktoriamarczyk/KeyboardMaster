@@ -30,6 +30,11 @@ public class Player : Creature
     // TODO: Implement all aniamtions based on CommandSystem / TextFollower
 
     #region TriggerAnimations
+    public void BasicAttack()
+    {
+        animator.SetTrigger(animationStates[Data.AnimationState.RegularAttack]);
+    }
+    
     public void AttackFireball()
     {
         if (timer.IsReady(0))
@@ -128,6 +133,7 @@ public class Player : Creature
 
     void InitializeCommands()
     {
+        CommandSet.AddCommand(animationStates[Data.AnimationState.RegularAttack], new() { BasicAttack });
         CommandSet.AddCommand(animationStates[Data.AnimationState.AttackFireball], new() { AttackFireball });
         CommandSet.AddCommand(animationStates[Data.AnimationState.AttackLightning], new() { AttackLightning });
         CommandSet.AddCommand(animationStates[Data.AnimationState.Defending], new() { Defend });
@@ -136,6 +142,7 @@ public class Player : Creature
 
     void OnDestroy()
     {
+        CommandSet.RemoveCommand(animationStates[Data.AnimationState.RegularAttack]);
         CommandSet.RemoveCommand(animationStates[Data.AnimationState.AttackFireball]);
         CommandSet.RemoveCommand(animationStates[Data.AnimationState.AttackLightning]);
         CommandSet.RemoveCommand(animationStates[Data.AnimationState.Defending]);
