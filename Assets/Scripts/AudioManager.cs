@@ -109,7 +109,7 @@ public class AudioManager : MonoBehaviour
             yield return null;
         }
 
-        sfxSource.volume = 0;
+        sfxSource.volume = 0.7f;
     }
 
     public void PlayBasicAttackSound()

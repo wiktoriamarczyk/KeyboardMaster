@@ -2731,7 +2731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7972261828072502178, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
       propertyPath: m_text
-      value: ' 300/300'
+      value: ' 800/800'
       objectReference: {fileID: 0}
     - target: {fileID: 7972261828072502178, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
       propertyPath: m_HorizontalAlignment

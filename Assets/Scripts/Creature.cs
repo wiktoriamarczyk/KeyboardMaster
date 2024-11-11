@@ -20,7 +20,7 @@ public class Creature : MonoBehaviour
             maxHealth = 100;
         } else if (this is XBOXBoss)
         {
-            maxHealth = 300;
+            maxHealth = 800;
         }
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
