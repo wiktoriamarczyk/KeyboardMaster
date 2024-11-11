@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TextCrawler : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class TextCrawler : MonoBehaviour
             lastPosition = transform.position;
             StartCoroutine(SwitchObjectsAfterDelay());
         }
+        StartCoroutine(LoadNextScene());
     }
 
     // Update is called once per frame
@@ -84,4 +86,37 @@ public class TextCrawler : MonoBehaviour
         transform.position = lastPosition; // Przywróæ ostatni¹ zapisan¹ pozycjê
         Debug.Log(gameObject.name + " przywrócono pozycjê.");
     }
+
+    private IEnumerator LoadNextScene()
+    {
+        // Pobierz aktualn¹ nazwê sceny
+        string currentSceneName = SceneManager.GetActiveScene().name;
+
+        // Ustawienie ró¿nych czasów oczekiwania i nazw docelowych scen
+        float delay;
+        string nextSceneName;
+
+        if (currentSceneName == "TestSceneJulia")
+        {
+            delay = 33f; // Na przyk³ad 20 sekund dla "Scene1"
+            nextSceneName = "SampleScene";
+        }
+        else if (currentSceneName == "WinTextScene")
+        {
+            delay = 17f; // Na przyk³ad 30 sekund dla "Scene2"
+            nextSceneName = "EndScene";
+        }
+        else
+        {
+            delay = 33f; // Domyœlne opóŸnienie dla innych scen
+            nextSceneName = "SampleScene";
+        }
+
+        // Czekaj przez okreœlony czas
+        yield return new WaitForSeconds(delay);
+
+        // Wywo³aj metodê LoadScene z instancji SceneController
+        SceneController.Instance.LoadScene(nextSceneName);
+    }
+
 }

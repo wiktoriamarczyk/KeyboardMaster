@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneController : MonoBehaviour
 {
     public static SceneController Instance;
+    public bool win { get; private set; }
 
     private void Awake()
     {
@@ -28,5 +29,10 @@ public class SceneController : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void SetGameResult(bool value)
+    {
+        win = value;
     }
 }
