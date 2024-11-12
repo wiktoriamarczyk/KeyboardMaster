@@ -1,85 +1,130 @@
+using System;
 using System.Collections;
 using Unity.Collections;
 using UnityEngine;
 using static Data;
+using static Timers;
 
 public class Player : Creature
 {
-    [SerializeField] TextFollower textFollower;
-    [SerializeField] Combo comboSystem;
-    [SerializeField] private Timers timer;
+    [Serializable]
+    class AttackTypes
+    {
+        public BasicWeapon basicWeapon;
+        public Fireball fireball;
+        public Lightning lightning;
+    }
+
+    [SerializeField] TextFollower   textFollower;
+    [SerializeField] Timers         timer;
+    [SerializeField] AudioManager   audioManager;
+    [SerializeField] AttackTypes    attackTypes;
+    [SerializeField] LookAtTarget   lookAtTarget;
+    [SerializeField] GameObject     weaponHolder;
+
+    [SerializeField] float immunityDuration = 5f;
+    [SerializeField, ReadOnly] float remainingImmunityTime = 0f;
+    [SerializeField] float drinkingCooldown = 30f;
+
+    bool isImmune = false;
 
     const float onTextMissedPenalty = 2;
     const float potionHealingAmount = 50f;
 
-    [SerializeField] private float immunityDuration = 5f; 
-    [SerializeField, ReadOnly] private float remainingImmunityTime = 0f;
-    private bool isImmune = false;
-
-    [SerializeField] private float fireballCooldown = 10f;  
-    [SerializeField] private float lightningCooldown = 15f;
-    [SerializeField] private float drinkingCooldown = 30f;
-
-    [SerializeField] private AudioManager audioManager;
-
     override protected void Start()
     {
+        maxHealth = playerHealth;
         base.Start();
         textFollower.onScoreChanged += OnTextFollowerScoreChanged;
         InitializeCommands();
     }
 
-    // TODO: Implement all aniamtions based on CommandSystem / TextFollower
+    void OnCollisionEnter(Collision collision)
+    {
+        if (isImmune)
+        {
+            return;
+        }
+
+        var weapon = collision.gameObject.GetComponent<Weapon>();
+        if (weapon != null && IsCorrectWeapon(weapon))
+        {
+            GetHit();
+            UpdateHealth(weapon.Damage);
+            audioManager.PlayPlayerHitSound();
+
+            Debug.Log(string.Format("<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",
+            (byte)(Color.green.r * 255f), (byte)(Color.green.g * 255f), (byte)(Color.green.b * 255f),
+            $"DAMAGE: '{weapon.Damage}' not found"));
+        }
+    }
+
+    bool IsCorrectWeapon(Weapon weapon)
+    {
+        return weapon.GetType() != typeof(BasicWeapon)
+            && weapon.GetType() != typeof(Fireball)
+            && weapon.GetType() != typeof(Lightning);
+    }
+
+    void OnDestroy()
+    {
+        CommandSet.RemoveCommand(animationStates[Data.AnimationState.RegularAttack]);
+        CommandSet.RemoveCommand(animationStates[Data.AnimationState.AttackFireball]);
+        CommandSet.RemoveCommand(animationStates[Data.AnimationState.AttackLightning]);
+        CommandSet.RemoveCommand(animationStates[Data.AnimationState.Defending]);
+        CommandSet.RemoveCommand(animationStates[Data.AnimationState.DrinkingPotion]);
+
+        StopAllCoroutines();
+    }
 
     #region TriggerAnimations
     public void BasicAttack()
     {
         animator.SetTrigger(animationStates[Data.AnimationState.RegularAttack]);
+        attackTypes.basicWeapon.Init(lookAtTarget.Target);
         audioManager.PlayBasicAttackSound();
     }
-    
+
     public void AttackFireball()
     {
-        if (timer.IsReady(0))
+        if (timer.IsReady(TimerType.Fireball))
         {
-            comboSystem.IncrementCombo();
+            attackTypes.fireball.Init(lookAtTarget.Target);
             animator.SetTrigger(animationStates[Data.AnimationState.AttackFireball]);
             audioManager.PlayFireballAttackSound();
-            timer.StartTimer(fireballCooldown, 0);
+            timer.StartTimer(attackTypes.fireball.Cooldown, TimerType.Fireball);
         }
     }
 
     public void AttackLightning()
     {
-        if (timer.IsReady(1))
+        if (timer.IsReady(TimerType.Light))
         {
-            comboSystem.IncrementCombo();
-            comboSystem.IncrementCombo();
+            attackTypes.lightning.Init(lookAtTarget.Target);
             animator.SetTrigger(animationStates[Data.AnimationState.AttackLightning]);
             audioManager.PlayLightningAttackSound();
-            timer.StartTimer(lightningCooldown, 1);
+            timer.StartTimer(attackTypes.lightning.Cooldown, TimerType.Light);
         }
     }
 
     public void Defend()
     {
-        if (timer.IsReady(3))
+        if (timer.IsReady(TimerType.Defend))
         {
             animator.SetTrigger(animationStates[Data.AnimationState.Defending]);
             ActivateImmunity();
             audioManager.PlayPlayerDefenseSound();
-            timer.StartTimer(immunityDuration, 3);
+            timer.StartTimer(immunityDuration, TimerType.Defend);
         }
-
     }
 
     public void DrinkPotion()
     {
-        if (timer.IsReady(2)) { 
+        if (timer.IsReady(TimerType.Drink)) {
             animator.SetTrigger(animationStates[Data.AnimationState.DrinkingPotion]);
             audioManager.PlayPlayerDrinkSound();
             Heal(potionHealingAmount);
-            timer.StartTimer(drinkingCooldown, 2);
+            timer.StartTimer(drinkingCooldown, TimerType.Drink);
         }
     }
     #endregion
@@ -117,26 +162,11 @@ public class Player : Creature
         UpdateHealth(onTextMissedPenalty * Mathf.Abs(score));
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (isImmune) return;
-
-        var weapon = collision.gameObject.GetComponent<Weapon>();
-        if (weapon != null)
-        {
-            GetHit();
-            comboSystem.ResetCombo();
-            UpdateHealth(weapon.Damage);
-            audioManager.PlayPlayerHitSound();
-        }
-    }
-
     void Heal(float amount)
     {
-        // Przywróæ ¿ycie graczowi
         currentHealth += amount;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth); // Upewnij siê, ¿e ¿ycie nie przekroczy maksymalnej wartoœci
-        healthBar.SetHealth(currentHealth / maxHealth); // Zaktualizuj pasek zdrowia
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        healthBar.SetHealth(currentHealth / maxHealth);
     }
 
     void InitializeCommands()
@@ -148,12 +178,10 @@ public class Player : Creature
         CommandSet.AddCommand(animationStates[Data.AnimationState.DrinkingPotion], new() { DrinkPotion });
     }
 
-    void OnDestroy()
+    protected override void Die()
     {
-        CommandSet.RemoveCommand(animationStates[Data.AnimationState.RegularAttack]);
-        CommandSet.RemoveCommand(animationStates[Data.AnimationState.AttackFireball]);
-        CommandSet.RemoveCommand(animationStates[Data.AnimationState.AttackLightning]);
-        CommandSet.RemoveCommand(animationStates[Data.AnimationState.Defending]);
-        CommandSet.RemoveCommand(animationStates[Data.AnimationState.DrinkingPotion]);
+        base.Die();
+        SceneController.Instance.SetGameResult(false);
+        StartCoroutine(LoadEndSceneAfterDelay(lossSceneName));
     }
 }

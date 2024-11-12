@@ -2,46 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class Combo : MonoBehaviour
 {
-    private int comboCounter = 0;
-    private float attackPower = 1f;
-    private float pulseScale = 1.2f; 
-    private float pulseDuration = 0.3f;
-    private float shakeMagnitude = 5f;       
-    private float shakeDuration = 0.1f;      
-    private int shakeTweenId;
-    private int complementShakeTweenId;
+    [SerializeField] TextMeshProUGUI comboText;
+    [SerializeField] TextMeshProUGUI complementText;
 
-    [SerializeField] private TextMeshProUGUI comboText;
-    [SerializeField] private TextMeshProUGUI complementText;
+    public static Action<int> onComboChanged;
 
-    private void Start()
+    int comboCounter = 0;
+    float attackPower = 1f;
+    float pulseScale = 1.2f;
+    float pulseDuration = 0.3f;
+    float shakeMagnitude = 5f;
+    float shakeDuration = 0.1f;
+    int shakeTweenId;
+    int complementShakeTweenId;
+
+    enum ComboState
+    {
+        Amazing = 15,
+        SlayinIt = 30
+    }
+
+    void Start()
     {
         ResetCombo();
-        comboText.text = "";
-        complementText.text = "";
         StartCoroutine(ChangeColor());
     }
 
     public void IncrementCombo()
     {
         comboCounter++;
-        attackPower *=comboCounter;
-        Debug.Log($"Attack Power: {attackPower}");
+        onComboChanged?.Invoke(comboCounter);
 
         if (comboCounter > 1)
         {
             comboText.text = $"x{comboCounter}";
-            if (comboCounter > 9) 
+            if (comboCounter >= (int)ComboState.SlayinIt)
             {
                 complementText.text = $"GURL U SLAYIN' IT!";
-            } 
-            else if (comboCounter > 4)
+            }
+            else if (comboCounter >= (int)ComboState.Amazing)
             {
                 complementText.text = $"AMAZING!!!";
-            } 
+            }
             else {
                 complementText.text = $"WOW";
             }
@@ -51,8 +57,8 @@ public class Combo : MonoBehaviour
         }
         else
         {
-            comboText.text = ""; // Wyczyœæ tekst, jeœli comboCounter <= 2
-            complementText.text = "";
+            comboText.text = string.Empty;
+            complementText.text = string.Empty;
             LeanTween.scale(comboText.rectTransform, Vector3.one, pulseDuration).setEase(LeanTweenType.easeOutQuad);
             StopShake();
             StopShakeForComplementText();
@@ -62,17 +68,22 @@ public class Combo : MonoBehaviour
     public void ResetCombo()
     {
         comboCounter = 0;
+        onComboChanged?.Invoke(comboCounter);
         attackPower = 1f;
-        Debug.Log("Combo Reset. Attack Power reset to base.");
-        comboText.text = "";
-        complementText.text = "";
+        comboText.text = string.Empty;
+        complementText.text = string.Empty;
         comboText.color = Color.white;
         comboText.rectTransform.localScale = Vector3.one;
         StopShake();
         StopShakeForComplementText();
     }
 
-    private void PulseText()
+    public float GetCurrentAttackPower()
+    {
+        return attackPower;
+    }
+
+    void PulseText()
     {
         comboText.rectTransform.localScale = Vector3.one;
         LeanTween.scale(comboText.rectTransform, Vector3.one * pulseScale, pulseDuration).setEase(LeanTweenType.easeOutElastic)
@@ -82,16 +93,16 @@ public class Combo : MonoBehaviour
             });
     }
 
-    private void StartShake()
+    void StartShake()
     {
-        // SprawdŸ, czy ju¿ nie ma aktywnego efektu trzêsienia
+        // Check if the text is already shaking
         if (LeanTween.isTweening(shakeTweenId)) return;
 
-        // Zainicjuj efekt trzêsienia jako powtarzalny, tworz¹c losowe ruchy wokó³ oryginalnej pozycji
+        // Initialize the shake effect as repeatable, creating random movements around the original position
         shakeTweenId = LeanTween.moveLocalX(comboText.gameObject, shakeMagnitude, shakeDuration)
             .setEase(LeanTweenType.easeShake)
             .setLoopPingPong()
-            .setRepeat(-1) // Powtarzaj w nieskoñczonoœæ
+            .setRepeat(-1) // Repeat infinitely
             .id;
 
         LeanTween.moveLocalY(comboText.gameObject, shakeMagnitude, shakeDuration)
@@ -100,14 +111,15 @@ public class Combo : MonoBehaviour
             .setRepeat(-1);
     }
 
-    private void StopShake()
+    void StopShake()
     {
-        // Zatrzymaj trzêsienie
+        // Stop the shake effect
         LeanTween.cancel(comboText.gameObject);
-        comboText.rectTransform.localPosition = Vector3.zero; // Resetuj pozycjê tekstu
+        // Reset the text position to the original
+        comboText.rectTransform.localPosition = Vector3.zero;
     }
 
-    private void StartShakeForComplementText()
+    void StartShakeForComplementText()
     {
         if (LeanTween.isTweening(complementShakeTweenId)) return;
 
@@ -123,29 +135,31 @@ public class Combo : MonoBehaviour
             .setRepeat(-1);
     }
 
-    private void StopShakeForComplementText()
+    void StopShakeForComplementText()
     {
         LeanTween.cancel(complementText.gameObject);
         complementText.rectTransform.localPosition = Vector3.zero;
     }
-    private IEnumerator ChangeColor()
+
+    IEnumerator ChangeColor()
     {
         float hue = 0f;
         while (true)
         {
-            hue += 0.002f; // Powolna, p³ynna zmiana odcienia dla p³ynniejszego przejœcia
-            if (hue > 1f) hue = 0f; // Przechodzimy ponownie przez kolory têczy, gdy osi¹gniemy pe³en zakres
-
-            if (comboCounter > 1) // Zmieniaj kolor tylko wtedy, gdy comboCounter > 1
+            // Continuous color change
+            hue += 0.002f;
+            // Reset hue when it reaches maximum value
+            if (hue > 1f)
             {
-                comboText.color = Color.HSVToRGB(hue, 1f, 1f); // Ustawienie koloru w przestrzeni HSV
+                hue = 0f;
             }
-            yield return null; // Przechodzenie do nastêpnej klatki
+            // Change color only when the combo is active
+            if (comboCounter > 1)
+            {
+                comboText.color = Color.HSVToRGB(hue, 1f, 1f);
+            }
+            // Wait for the next frame
+            yield return null;
         }
-    }
-
-    public float GetCurrentAttackPower()
-    {
-        return attackPower;
     }
 }

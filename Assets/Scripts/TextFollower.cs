@@ -7,8 +7,9 @@ using System.Text.RegularExpressions;
 public class TextFollower : MonoBehaviour
 {
     [SerializeField] TMP_Text                       textDisplay;
-    [SerializeField] float                          letterTimeLimit = 2f;
     [SerializeField] UserInterfaceItemsActivator    textBoxActivator;
+    [SerializeField] Combo                          combo;
+    [SerializeField] float                          letterTimeLimit = 2f;
     [SerializeField] int                            scoreModifierOnMiss = 1;
     [SerializeField] int                            scoreModifier = 2;
 
@@ -20,23 +21,12 @@ public class TextFollower : MonoBehaviour
     float   letterTimer = 0f;
     Regex   regex = new Regex(@"^[a-zA-Z0-9\W]$");
 
-    // <color=#RRGGBB></color> - 23 characters
-    const int singleHTMLInstructLength = 23;
     const string wordsFile = "Assets/words-list.txt";
 
     void Start()
     {
         LoadTextFromFile(wordsFile);
         currentText = textDisplay.text = targetText;
-    }
-
-    void LoadTextFromFile(string path)
-    {
-        if (path == null)
-        {
-            return;
-        }
-        targetText = File.ReadAllText(path).ToLower();
     }
 
     void Update()
@@ -66,6 +56,15 @@ public class TextFollower : MonoBehaviour
         }
     }
 
+    void LoadTextFromFile(string path)
+    {
+        if (path == null)
+        {
+            return;
+        }
+        targetText = File.ReadAllText(path).ToLower();
+    }
+
     void CheckInput(char userInputLetter)
     {
         int score = 0;
@@ -74,31 +73,22 @@ public class TextFollower : MonoBehaviour
         if (char.ToLower(userInputLetter) == char.ToLower(correctLetter))
         {
             score = scoreModifier;
+            combo.IncrementCombo();
         }
         else
         {
             score = -scoreModifier;
+            combo.ResetCombo();
         }
 
         onScoreChanged?.Invoke(score);
         NextLetter();
     }
 
-    string ReplaceWithColor(string text, int index, Color color)
-    {
-        // all letters before the current letter are colored
-        int finalIndex = singleHTMLInstructLength * currentLetterIndex + index;
-
-        string coloredText = text.Substring(0, finalIndex);
-        coloredText += $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{text[finalIndex]}</color>";
-        coloredText += text.Substring(finalIndex + 1);
-
-        return coloredText;
-    }
-
     void MissedLetter()
     {
         onScoreChanged?.Invoke(-scoreModifierOnMiss);
+        combo.ResetCombo();
         NextLetter();
     }
 

@@ -20,33 +20,40 @@ public class Timers : MonoBehaviour
     private bool isDrinkRunning;
     private bool isDefendRunning;
 
-    public void StartTimer(float cooldownDuration, int value)
+    public enum TimerType
     {
-        // Rozpoczyna timer dla odpowiedniej umiejêtnoœci
+        Fireball = 0,
+        Light,
+        Drink,
+        Defend
+    }
+
+    public void StartTimer(float cooldownDuration, TimerType value)
+    {
         switch (value)
         {
-            case 0:
+            case TimerType.Fireball:
                 remainingFireballTime = cooldownDuration;
                 isFireballRunning = true;
                 ActivateTimerText(timerFireball, "FIREBALL COOLDOWN: ");
                 break;
-            case 1:
+            case TimerType.Light:
                 remainingLightTime = cooldownDuration;
                 isLightRunning = true;
                 ActivateTimerText(timerLight, "LIGHTNING COOLDOWN: ");
                 break;
-            case 2:
+            case TimerType.Drink:
                 remainingDrinkTime = cooldownDuration;
                 isDrinkRunning = true;
                 ActivateTimerText(timerDrink, "DRINK POTION COOLDOWN: ");
                 break;
-            case 3:
+            case TimerType.Defend:
                 remainingDefendTime = cooldownDuration;
                 isDefendRunning = true;
                 ActivateTimerText(timerDefend, "DEFENSE ACTIVE FOR: ");
                 break;
             default:
-                Debug.LogWarning("Nieprawid³owa wartoœæ timera.");
+                Debug.LogWarning("Wrong timer value");
                 break;
         }
     }
@@ -70,11 +77,11 @@ public class Timers : MonoBehaviour
                 remainingTime = 0;
                 isRunning = false;
                 timerText.text = "Ready";
-                timerText.gameObject.SetActive(false); // Dezaktywacja tekstu po zakoñczeniu
+                timerText.gameObject.SetActive(false);
             }
             else
             {
-                // Aktualizuje tekst z pozosta³ym czasem
+                // Update the timer text with the remaining time
                 timerText.text = timerText.text.Split(':')[0] + ": " + remainingTime.ToString("F1") + "s";
             }
         }
@@ -83,18 +90,17 @@ public class Timers : MonoBehaviour
     private void ActivateTimerText(TextMeshProUGUI timerText, string skillName)
     {
         timerText.text = skillName;
-        timerText.gameObject.SetActive(true); // Aktywacja tekstu na pocz¹tku odliczania
+        timerText.gameObject.SetActive(true);
     }
 
-    public bool IsReady(int value)
+    public bool IsReady(TimerType value)
     {
-        // Sprawdza, czy dany timer jest gotowy
         return value switch
         {
-            0 => !isFireballRunning,
-            1 => !isLightRunning,
-            2 => !isDrinkRunning,
-            3 => !isDefendRunning,
+            TimerType.Fireball => !isFireballRunning,
+            TimerType.Light => !isLightRunning,
+            TimerType.Drink => !isDrinkRunning,
+            TimerType.Defend => !isDefendRunning,
             _ => false
         };
     }

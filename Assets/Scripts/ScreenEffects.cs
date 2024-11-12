@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,39 +16,49 @@ public class ScreenEffects : MonoBehaviour
     private Camera mainCamera;
     private Vector3 originalCameraPosition;
 
+    enum ScreenEffect
+    {
+        Shake = 0,
+        Blackout,
+        Count
+    }
+
     void Start()
     {
         mainCamera = Camera.main;
         originalCameraPosition = mainCamera.transform.position;
         if (blackScreenImage != null)
         {
-            blackScreenImage.color = new Color(0, 0, 0, 0);  // Ustaw pocz¹tkow¹ przezroczystoœæ na 0
+            blackScreenImage.color = new Color(0, 0, 0, 0);
         }
 
-        // Start losowego uruchamiania efektów
         StartCoroutine(ActivateRandomEffects());
+    }
+
+    void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 
     private IEnumerator ActivateRandomEffects()
     {
         while (true)
         {
-            // Poczekaj losow¹ iloœæ czasu przed w³¹czeniem efektu
             float interval = Random.Range(minInterval, maxInterval);
             yield return new WaitForSeconds(interval);
 
-            // Wybierz losowy efekt do aktywacji
-            int randomEffect = Random.Range(0, 2); // 0 to trzêsienie ekranu, 1 to czarny ekran
+            int randomEffect = Random.Range((int)ScreenEffect.Shake, (int)ScreenEffect.Count);
 
-            if (randomEffect == 0)
+            switch (randomEffect)
             {
-                StartCoroutine(ScreenShake());
-                Debug.Log("SHAKE");
-            }
-            else if (randomEffect == 1)
-            {
-                StartCoroutine(Blackout());
-                Debug.Log("BLACKOUT");
+                case (int)ScreenEffect.Shake:
+                    StartCoroutine(ScreenShake());
+                    Debug.Log("Screen Shake");
+                    break;
+                case (int)ScreenEffect.Blackout:
+                    StartCoroutine(Blackout());
+                    Debug.Log("Blackout");
+                    break;
             }
         }
     }
@@ -60,7 +69,6 @@ public class ScreenEffects : MonoBehaviour
 
         while (elapsedTime < shakeDuration)
         {
-            // Przemieszczanie kamery losowo w celu wywo³ania trzêsienia
             Vector3 randomOffset = Random.insideUnitSphere * shakeIntensity;
             mainCamera.transform.position = originalCameraPosition + randomOffset;
 
@@ -68,7 +76,6 @@ public class ScreenEffects : MonoBehaviour
             yield return null;
         }
 
-        // Przywróæ oryginaln¹ pozycjê kamery
         mainCamera.transform.position = originalCameraPosition;
     }
 

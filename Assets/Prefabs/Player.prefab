@@ -198,4 +198,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBar: {fileID: 0}
   animator: {fileID: 8665908617009786693}
+  currentHealth: 0
   textFollower: {fileID: 0}
+  timer: {fileID: 0}
+  audioManager: {fileID: 0}
+  attackTypes:
+    basicWeapon: {fileID: 1871800581599202402, guid: 36fc83345d5673a4ab2102e6cd438d67, type: 3}
+    fireball: {fileID: 647972359574583316, guid: ca7461d4050462c4ba186f39fe5016f3, type: 3}
+    lightning: {fileID: 4549050675582541375, guid: 72c5993887ec3604ea8bde8029768b39, type: 3}
+  lookAtTarget: {fileID: 1972545584047766830}
+  immunityDuration: 5
+  remainingImmunityTime: 0
+  drinkingCooldown: 30

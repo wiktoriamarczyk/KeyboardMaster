@@ -1,55 +1,27 @@
 using System.Collections;
 using UnityEngine;
 using static Data;
+using static Timers;
 
 public class XBOXBoss : Creature
 {
     [SerializeField] GameObject     weaponPrefab;
     [SerializeField] GameObject     weaponHolder;
     [SerializeField] LookAtTarget   lookAtTarget;
-    [SerializeField] Combo          comboSystem;
-    [SerializeField] private Timers timer;
+    [SerializeField] AudioManager   audioManager;
+    [SerializeField] Timers         timer;
 
     GameObject spawnedWeapon;
 
-    float attackDamage = 1f;
-    //const float fireballDamage = 10;
-    float fireballDamage;
-    //const float lightningDamage = 20;
-    float lightningDamage;
     const float timeToAttack = 4f;
-
-    [SerializeField] private AudioManager audioManager;
+    const float weaponGrabDuration = 1f;
+    const float weaponThrowDuration = 0.5f;
 
     override protected void Start()
     {
+        maxHealth = xboxBossHealth;
         base.Start();
-        InitializeCommands();
         StartCoroutine(AttackCoroutine());
-    }
-
-    IEnumerator AttackCoroutine()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(timeToAttack);
-            Debug.Log("Attacking");
-            animator.SetTrigger(animationStates[Data.AnimationState.RegularAttack]);
-            audioManager.PlayEnemyAttackSound();
-
-            yield return new WaitForSeconds(1f);
-            spawnedWeapon = Instantiate(weaponPrefab, weaponHolder.transform);
-            spawnedWeapon.transform.localPosition = Vector3.zero;
-            spawnedWeapon.transform.localRotation = Quaternion.identity;
-            spawnedWeapon.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-
-            yield return new WaitForSeconds(0.5f);
-            Debug.Log("Throwing");
-            var weaponComponent = spawnedWeapon.GetComponent<XBOXWeapon>();
-            spawnedWeapon.transform.parent = transform.parent;
-            spawnedWeapon = null;
-            weaponComponent.Throw(lookAtTarget.Target.transform.position);
-        }
     }
 
     void Update()
@@ -60,43 +32,48 @@ public class XBOXBoss : Creature
         }
     }
 
-    void InitializeCommands()
+    private void OnCollisionEnter(Collision collision)
     {
-        CommandSet.AddCommand(animationStates[Data.AnimationState.RegularAttack], new() { GetHit, UpdateHealthAttack });
-        CommandSet.AddCommand(animationStates[Data.AnimationState.AttackFireball], new() { GetHit, UpdateHealthFireball });
-        CommandSet.AddCommand(animationStates[Data.AnimationState.AttackLightning], new() { GetHit, UpdateHealthLightning });
-    }
-
-    void UpdateHealthAttack()
-    {
-        base.UpdateHealth(attackDamage);
-        audioManager.PlayEnemyHitSound();
-    }
-    void UpdateHealthFireball()
-    {
-        if (timer.IsReady(0))
+        var weapon = collision.gameObject.GetComponent<Weapon>();
+        if (weapon != null && weapon.GetType() != typeof(XBOXWeapon))
         {
-            fireballDamage = comboSystem.GetCurrentAttackPower();
-            base.UpdateHealth(fireballDamage);
-            audioManager.PlayEnemyHitSound();
-        }
-    }
-
-    void UpdateHealthLightning()
-    {
-        if (timer.IsReady(1))
-        {
-            lightningDamage = comboSystem.GetCurrentAttackPower();
-            base.UpdateHealth(lightningDamage);
+            GetHit();
+            UpdateHealth(weapon.Damage);
             audioManager.PlayEnemyHitSound();
         }
     }
 
     void OnDestroy()
     {
-        CommandSet.RemoveCommand(animationStates[Data.AnimationState.RegularAttack]);
-        CommandSet.RemoveCommand(animationStates[Data.AnimationState.AttackFireball]);
-        CommandSet.RemoveCommand(animationStates[Data.AnimationState.AttackLightning]);
         StopAllCoroutines();
+    }
+
+    IEnumerator AttackCoroutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(timeToAttack);
+            animator.SetTrigger(animationStates[Data.AnimationState.RegularAttack]);
+            audioManager.PlayEnemyAttackSound();
+
+            yield return new WaitForSeconds(weaponGrabDuration);
+            spawnedWeapon = Instantiate(weaponPrefab, weaponHolder.transform);
+            spawnedWeapon.transform.localPosition = Vector3.zero;
+            spawnedWeapon.transform.localRotation = Quaternion.identity;
+            spawnedWeapon.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+
+            yield return new WaitForSeconds(weaponThrowDuration);
+            var weaponComponent = spawnedWeapon.GetComponent<XBOXWeapon>();
+            spawnedWeapon.transform.parent = transform.parent;
+            spawnedWeapon = null;
+            weaponComponent.Init(lookAtTarget.Target);
+        }
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+        SceneController.Instance.SetGameResult(true);
+        StartCoroutine(LoadEndSceneAfterDelay(winSceneName));
     }
 }
