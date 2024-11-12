@@ -10,8 +10,9 @@ public class Combo : MonoBehaviour
     [SerializeField] TextMeshProUGUI complementText;
 
     public static Action<int> onComboChanged;
+    public static int ComboCounter => comboCounter;
 
-    int comboCounter = 0;
+    static int comboCounter = 0;
     int shakeTweenId;
     int complementShakeTweenId;
 

@@ -5,7 +5,7 @@ public class BasicWeapon : Weapon
     [SerializeField] Rigidbody rb;
 
     protected override float baseDamage => 1f;
-    protected override float speed => 5f;
+    protected override float speed => 10f;
     protected override float lifeTime => 5f;
 
     public override void Init(GameObject source, GameObject target)

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -6,22 +7,25 @@ public class ScoreIndicator : MonoBehaviour
 {
     [SerializeField] RectTransform rectTransform;
     [SerializeField] TextMeshProUGUI textDisplay;
-    [SerializeField] TextFollower textFollower;
+    [SerializeField] Color positiveColor;
+    [SerializeField] Color negativeColor;
 
-    const string scoredText = "+";
-    const string missedText = "-";
-    const float animDuration = 0.2f;
+    const string positiveIndicator = "+";
+    const string negativeIndicator = "-";
+    const float animDuration = 0.5f;
 
     void Start()
     {
         rectTransform.DOScale(0, 0);
-        textFollower.onScoreChanged += UpdateScoreIndicator;
     }
 
-    void UpdateScoreIndicator(int score)
+    public void UpdateScoreIndicator(float score)
     {
-        textDisplay.text = score > 0 ? scoredText : missedText;
-        textDisplay.color = score > 0 ? Color.green : Color.red;
+        StringBuilder sb = new StringBuilder();
+        sb.Append(score > 0 ? positiveIndicator : negativeIndicator);
+        sb.Append(Mathf.Abs(score));
+        textDisplay.text = sb.ToString();
+        textDisplay.color = score > 0 ? positiveColor : negativeColor;
         rectTransform.DOScale(1, animDuration).OnComplete(() => rectTransform.DOScale(0, animDuration));
     }
 }

@@ -10,6 +10,7 @@ public abstract class Weapon : MonoBehaviour
     protected virtual float lifeTime { get; set; } = 0;
     protected virtual float cooldown { get; set; } = 0;
     protected virtual float comboScaler { get; set; } = 0.5f;
+    protected virtual float currentCombo { get; set; } = 0f;
     protected virtual GameObject source { get; set; }
     protected virtual GameObject target { get; set; }
 
@@ -23,9 +24,10 @@ public abstract class Weapon : MonoBehaviour
 
     protected void Start()
     {
-        currentDamage = baseDamage;
         StartCoroutine(DestroyAfterTime());
         Combo.onComboChanged += OnComboChanged;
+        currentDamage = baseDamage;
+        OnComboChanged(Combo.ComboCounter);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -56,6 +58,7 @@ public abstract class Weapon : MonoBehaviour
     protected void OnComboChanged(int combo)
     {
         currentDamage = baseDamage + combo * comboScaler;
+        currentCombo = combo;
     }
 
     public virtual void Init(GameObject source, GameObject target)

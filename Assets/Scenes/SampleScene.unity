@@ -946,6 +946,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc63f6df8d2dc3445b62087327de878b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1622733876 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 179488588121398443, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
+  m_PrefabInstance: {fileID: 1759967838145523704}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 234834788c4badc46bcf8c16ae3cadc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1858209243 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 287559625428832879, guid: 4bc01d3f180315c48bde695706a25097, type: 3}
@@ -1172,6 +1183,10 @@ PrefabInstance:
       propertyPath: audioManager
       value: 
       objectReference: {fileID: 1224209115}
+    - target: {fileID: 4406029503859544165, guid: 4bc01d3f180315c48bde695706a25097, type: 3}
+      propertyPath: scoreIndicator
+      value: 
+      objectReference: {fileID: 1759967838145523705}
     - target: {fileID: 6557431797558027216, guid: 4bc01d3f180315c48bde695706a25097, type: 3}
       propertyPath: m_Name
       value: XBOX_Boss
@@ -1295,6 +1310,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2230854937446264925, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684116721268823308, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684116721268823308, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3084363413958138942, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
@@ -1559,6 +1582,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
+--- !u!114 &1759967838145523705 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 893414149678669458, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
+  m_PrefabInstance: {fileID: 1759967838145523704}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 234834788c4badc46bcf8c16ae3cadc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1759967838145523706 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1878934183892555098, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
@@ -1598,6 +1632,10 @@ PrefabInstance:
       propertyPath: textFollower
       value: 
       objectReference: {fileID: 1029287874}
+    - target: {fileID: 714100410415591486, guid: a3761ba93f582ae4fa0584c8c77c7e79, type: 3}
+      propertyPath: scoreIndicator
+      value: 
+      objectReference: {fileID: 1622733876}
     - target: {fileID: 714100410415591486, guid: a3761ba93f582ae4fa0584c8c77c7e79, type: 3}
       propertyPath: fireballCooldown
       value: 10

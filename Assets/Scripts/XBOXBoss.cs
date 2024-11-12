@@ -36,7 +36,7 @@ public class XBOXBoss : Creature
         if (weaponComponent != null && weaponComponent.Source != gameObject)
         {
             GetHit();
-            UpdateHealth(weaponComponent.Damage);
+            UpdateHealth(-weaponComponent.Damage);
             audioManager.PlayEnemyHitSound();
 
             Debug.Log(string.Format("<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",

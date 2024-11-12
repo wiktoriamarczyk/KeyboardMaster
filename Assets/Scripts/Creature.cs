@@ -5,6 +5,7 @@ using static Data;
 public class Creature : MonoBehaviour
 {
     [SerializeField] protected HealthBar    healthBar;
+    [SerializeField] protected ScoreIndicator scoreIndicator;
     [SerializeField] protected Animator     animator;
 
     [SerializeField] protected float currentHealth;
@@ -32,10 +33,11 @@ public class Creature : MonoBehaviour
 
     virtual protected void UpdateHealth(float value)
     {
-        currentHealth -= value;
+        currentHealth += value;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         float healthPercentage = currentHealth / maxHealth;
         healthBar.SetHealth(healthPercentage);
+        scoreIndicator.UpdateScoreIndicator(value);
 
         if (currentHealth <= 0)
         {

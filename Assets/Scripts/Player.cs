@@ -52,7 +52,7 @@ public class Player : Creature
         if (weapon != null && weapon.Source != gameObject)
         {
             GetHit();
-            UpdateHealth(weapon.Damage);
+            UpdateHealth(-weapon.Damage);
             audioManager.PlayPlayerHitSound();
 
             Debug.Log(string.Format("<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",
@@ -163,14 +163,13 @@ public class Player : Creature
         }
 
         GetHit();
-        UpdateHealth(onTextMissedPenalty * Mathf.Abs(score));
+        UpdateHealth(-onTextMissedPenalty * Mathf.Abs(score));
     }
 
     void Heal(float amount)
     {
-        currentHealth += amount;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        healthBar.SetHealth(currentHealth / maxHealth);
+        amount = Mathf.Clamp(amount, 0, maxHealth);
+        UpdateHealth(amount);
     }
 
     void InitializeCommands()
