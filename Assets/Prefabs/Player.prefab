@@ -64,11 +64,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gaming Keyboard
       objectReference: {fileID: 0}
+    - target: {fileID: 6741401772325809665, guid: bb732cdb57d31d540bfe20144ec7aefa, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb732cdb57d31d540bfe20144ec7aefa, type: 3}
+--- !u!1 &7444440475833123077 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6738868876004467056, guid: bb732cdb57d31d540bfe20144ec7aefa, type: 3}
+  m_PrefabInstance: {fileID: 4236394809553346677}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7783389517769251775 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6255100920701320138, guid: bb732cdb57d31d540bfe20144ec7aefa, type: 3}
@@ -183,7 +192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8b40750310b2844da8e2976cd7ecf64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  target: {fileID: 8723986208587316555}
 --- !u!114 &714100410415591486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,6 +216,7 @@ MonoBehaviour:
     fireball: {fileID: 647972359574583316, guid: ca7461d4050462c4ba186f39fe5016f3, type: 3}
     lightning: {fileID: 4549050675582541375, guid: 72c5993887ec3604ea8bde8029768b39, type: 3}
   lookAtTarget: {fileID: 1972545584047766830}
+  weaponHolder: {fileID: 7444440475833123077}
   immunityDuration: 5
   remainingImmunityTime: 0
   drinkingCooldown: 30

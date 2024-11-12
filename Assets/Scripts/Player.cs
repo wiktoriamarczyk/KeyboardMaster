@@ -26,6 +26,8 @@ public class Player : Creature
     [SerializeField, ReadOnly] float remainingImmunityTime = 0f;
     [SerializeField] float drinkingCooldown = 30f;
 
+    GameObject spawnedWeapon;
+
     bool isImmune = false;
 
     const float onTextMissedPenalty = 2;
@@ -47,7 +49,7 @@ public class Player : Creature
         }
 
         var weapon = collision.gameObject.GetComponent<Weapon>();
-        if (weapon != null && IsCorrectWeapon(weapon))
+        if (weapon != null && weapon.Source != gameObject)
         {
             GetHit();
             UpdateHealth(weapon.Damage);
@@ -55,15 +57,8 @@ public class Player : Creature
 
             Debug.Log(string.Format("<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",
             (byte)(Color.green.r * 255f), (byte)(Color.green.g * 255f), (byte)(Color.green.b * 255f),
-            $"DAMAGE: '{weapon.Damage}' not found"));
+            $"DAMAGE to PLAYER: {weapon.Damage} - {weapon.gameObject.name}"));
         }
-    }
-
-    bool IsCorrectWeapon(Weapon weapon)
-    {
-        return weapon.GetType() != typeof(BasicWeapon)
-            && weapon.GetType() != typeof(Fireball)
-            && weapon.GetType() != typeof(Lightning);
     }
 
     void OnDestroy()
@@ -81,7 +76,7 @@ public class Player : Creature
     public void BasicAttack()
     {
         animator.SetTrigger(animationStates[Data.AnimationState.RegularAttack]);
-        attackTypes.basicWeapon.Init(lookAtTarget.Target);
+        InitWeapon(attackTypes.basicWeapon);
         audioManager.PlayBasicAttackSound();
     }
 
@@ -89,7 +84,7 @@ public class Player : Creature
     {
         if (timer.IsReady(TimerType.Fireball))
         {
-            attackTypes.fireball.Init(lookAtTarget.Target);
+            InitWeapon(attackTypes.fireball);
             animator.SetTrigger(animationStates[Data.AnimationState.AttackFireball]);
             audioManager.PlayFireballAttackSound();
             timer.StartTimer(attackTypes.fireball.Cooldown, TimerType.Fireball);
@@ -100,7 +95,7 @@ public class Player : Creature
     {
         if (timer.IsReady(TimerType.Light))
         {
-            attackTypes.lightning.Init(lookAtTarget.Target);
+            InitWeapon(attackTypes.lightning);
             animator.SetTrigger(animationStates[Data.AnimationState.AttackLightning]);
             audioManager.PlayLightningAttackSound();
             timer.StartTimer(attackTypes.lightning.Cooldown, TimerType.Light);
@@ -120,7 +115,8 @@ public class Player : Creature
 
     public void DrinkPotion()
     {
-        if (timer.IsReady(TimerType.Drink)) {
+        if (timer.IsReady(TimerType.Drink))
+        {
             animator.SetTrigger(animationStates[Data.AnimationState.DrinkingPotion]);
             audioManager.PlayPlayerDrinkSound();
             Heal(potionHealingAmount);
@@ -128,6 +124,14 @@ public class Player : Creature
         }
     }
     #endregion
+
+    void InitWeapon(Weapon weapon)
+    {
+        spawnedWeapon = Instantiate(weapon.gameObject, weaponHolder.transform.position, Quaternion.identity);
+        spawnedWeapon.transform.parent = transform.parent;
+        spawnedWeapon.name = weapon.name;
+        spawnedWeapon.GetComponent<Weapon>().Init(gameObject, lookAtTarget.Target);
+    }
 
     void ActivateImmunity()
     {
@@ -153,7 +157,7 @@ public class Player : Creature
 
     void OnTextFollowerScoreChanged(int score)
     {
-        if (score > 0)
+        if (score > 0 || isImmune)
         {
             return;
         }

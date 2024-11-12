@@ -4,17 +4,17 @@ using UnityEngine.UI;
 
 public class ScreenEffects : MonoBehaviour
 {
-    [SerializeField] private float minInterval = 10f; // minimalny czas miêdzy efektami
-    [SerializeField] private float maxInterval = 20f; // maksymalny czas miêdzy efektami
-    [SerializeField] private float shakeDuration = 5f; // czas trwania efektu trzêsienia
-    [SerializeField] private float shakeIntensity = 0.2f; // intensywnoœæ trzêsienia
-    [SerializeField] public float fadeDuration = 1f; // Czas trwania fade in i fade out
+    [SerializeField] private float minInterval = 10f;
+    [SerializeField] private float maxInterval = 20f;
+    [SerializeField] private float shakeDuration = 5f;
+    [SerializeField] private float shakeIntensity = 0.2f;
+    [SerializeField] public float fadeDuration = 1f;
     [SerializeField] public float waitTime = 2f;
 
-    [SerializeField] public Image blackScreenImage; // panel UI do efektu czarnego ekranu
+    [SerializeField] public Image blackScreenImage;
 
-    private Camera mainCamera;
-    private Vector3 originalCameraPosition;
+    Camera mainCamera;
+    Vector3 originalCameraPosition;
 
     enum ScreenEffect
     {
@@ -40,7 +40,7 @@ public class ScreenEffects : MonoBehaviour
         StopAllCoroutines();
     }
 
-    private IEnumerator ActivateRandomEffects()
+    IEnumerator ActivateRandomEffects()
     {
         while (true)
         {
@@ -63,7 +63,7 @@ public class ScreenEffects : MonoBehaviour
         }
     }
 
-    private IEnumerator ScreenShake()
+    IEnumerator ScreenShake()
     {
         float elapsedTime = 0f;
 
@@ -79,17 +79,17 @@ public class ScreenEffects : MonoBehaviour
         mainCamera.transform.position = originalCameraPosition;
     }
 
-    private IEnumerator Blackout()
+    IEnumerator Blackout()
     {
         if (blackScreenImage != null)
         {
-            yield return StartCoroutine(Fade(0, 1)); // Fade to black
-            yield return new WaitForSeconds(waitTime); // Wait in black screen
-            yield return StartCoroutine(Fade(1, 0)); // Fade back to normal
+            yield return StartCoroutine(Fade(0, 1));    // Fade to black
+            yield return new WaitForSeconds(waitTime);  // Wait in black screen
+            yield return StartCoroutine(Fade(1, 0));    // Fade back to normal
         }
     }
 
-    private IEnumerator Fade(float startAlpha, float endAlpha)
+    IEnumerator Fade(float startAlpha, float endAlpha)
     {
         float elapsedTime = 0f;
         Color color = blackScreenImage.color;

@@ -1,17 +1,15 @@
 using System.Collections;
 using UnityEngine;
 using static Data;
-using static Timers;
 
 public class XBOXBoss : Creature
 {
-    [SerializeField] GameObject     weaponPrefab;
+    [SerializeField] XBOXWeapon     weapon;
     [SerializeField] GameObject     weaponHolder;
     [SerializeField] LookAtTarget   lookAtTarget;
     [SerializeField] AudioManager   audioManager;
-    [SerializeField] Timers         timer;
 
-    GameObject spawnedWeapon;
+    GameObject weaponObject;
 
     const float timeToAttack = 4f;
     const float weaponGrabDuration = 1f;
@@ -26,26 +24,38 @@ public class XBOXBoss : Creature
 
     void Update()
     {
-        if (spawnedWeapon != null)
+        if (weaponObject != null)
         {
-            spawnedWeapon.gameObject.transform.localPosition = Vector3.zero;
+            weaponObject.gameObject.transform.localPosition = Vector3.zero;
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
-        var weapon = collision.gameObject.GetComponent<Weapon>();
-        if (weapon != null && weapon.GetType() != typeof(XBOXWeapon))
+        var weaponComponent = collision.gameObject.GetComponent<Weapon>();
+        if (weaponComponent != null && weaponComponent.Source != gameObject)
         {
             GetHit();
-            UpdateHealth(weapon.Damage);
+            UpdateHealth(weaponComponent.Damage);
             audioManager.PlayEnemyHitSound();
+
+            Debug.Log(string.Format("<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",
+              (byte)(Color.red.r * 255f), (byte)(Color.red.g * 255f), (byte)(Color.red.b * 255f),
+              $"DAMAGE to XBOX: {weaponComponent.Damage} - {weaponComponent.gameObject.name}"));
+            Debug.Log($"SOURCE: {weaponComponent.Source?.name} | init: {weaponComponent.initialized} ME: {gameObject}");
         }
     }
 
     void OnDestroy()
     {
         StopAllCoroutines();
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+        SceneController.Instance.SetGameResult(true);
+        StartCoroutine(LoadEndSceneAfterDelay(winSceneName));
     }
 
     IEnumerator AttackCoroutine()
@@ -57,23 +67,16 @@ public class XBOXBoss : Creature
             audioManager.PlayEnemyAttackSound();
 
             yield return new WaitForSeconds(weaponGrabDuration);
-            spawnedWeapon = Instantiate(weaponPrefab, weaponHolder.transform);
-            spawnedWeapon.transform.localPosition = Vector3.zero;
-            spawnedWeapon.transform.localRotation = Quaternion.identity;
-            spawnedWeapon.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            weaponObject = Instantiate(weapon.gameObject, weaponHolder.transform);
+            weaponObject.transform.localPosition = Vector3.zero;
+            weaponObject.transform.localRotation = Quaternion.identity;
+            weaponObject.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 
             yield return new WaitForSeconds(weaponThrowDuration);
-            var weaponComponent = spawnedWeapon.GetComponent<XBOXWeapon>();
-            spawnedWeapon.transform.parent = transform.parent;
-            spawnedWeapon = null;
-            weaponComponent.Init(lookAtTarget.Target);
+            weaponObject.transform.parent = transform.parent;
+            var weaponComponent = weaponObject.GetComponent<Weapon>();
+            weaponObject = null;
+            weaponComponent.Init(gameObject, lookAtTarget.Target);
         }
-    }
-
-    protected override void Die()
-    {
-        base.Die();
-        SceneController.Instance.SetGameResult(true);
-        StartCoroutine(LoadEndSceneAfterDelay(winSceneName));
     }
 }

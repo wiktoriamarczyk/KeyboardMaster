@@ -4,23 +4,36 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
-    protected float currentDamage = 0;
-    protected float baseDamage = 0;
-    protected float speed = 0;
-    protected float lifeTime = 0;
-    protected float cooldown = 0;
-    protected float comboScaler = 0.5f;
-
-    const float animationDuration = 0.2f;
+    protected virtual float currentDamage { get; set; } = 0;
+    protected virtual float baseDamage { get; set; } = 0;
+    protected virtual float speed { get; set; } = 0;
+    protected virtual float lifeTime { get; set; } = 0;
+    protected virtual float cooldown { get; set; } = 0;
+    protected virtual float comboScaler { get; set; } = 0.5f;
+    protected virtual GameObject source { get; set; }
+    protected virtual GameObject target { get; set; }
 
     public float Damage => currentDamage;
     public float Cooldown => cooldown;
+    public GameObject Source => source;
 
-    protected virtual void Start()
+    public bool initialized { get; private set; } = false;
+
+    const float animationDuration = 0.2f;
+
+    protected void Start()
     {
         currentDamage = baseDamage;
         StartCoroutine(DestroyAfterTime());
         Combo.onComboChanged += OnComboChanged;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject == target)
+        {
+            Destroy();
+        }
     }
 
     protected void OnDestroy()
@@ -32,6 +45,11 @@ public abstract class Weapon : MonoBehaviour
     IEnumerator DestroyAfterTime()
     {
         yield return new WaitForSeconds(lifeTime);
+        Destroy();
+    }
+
+    void Destroy()
+    {
         transform.DOScale(0, animationDuration).OnComplete(() => Destroy(gameObject));
     }
 
@@ -40,5 +58,15 @@ public abstract class Weapon : MonoBehaviour
         currentDamage = baseDamage + combo * comboScaler;
     }
 
-    public abstract void Init(GameObject from, GameObject target);
+    public virtual void Init(GameObject source, GameObject target)
+    {
+        this.source = source;
+
+        if (source == null)
+        {
+            Debug.Log("AAAAAAAAAAAAAAAA");
+        }
+        this.target = target;
+        initialized = true;
+    }
 }

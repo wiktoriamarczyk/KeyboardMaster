@@ -306,37 +306,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!1 &438937238
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 438937239}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &438937239
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 438937238}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 774.2018, y: 528.29297, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &452098677 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8050242212800337514, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
@@ -1207,6 +1176,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: XBOX_Boss
       objectReference: {fileID: 0}
+    - target: {fileID: 6557431797558027217, guid: 4bc01d3f180315c48bde695706a25097, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6557431797558027218, guid: 4bc01d3f180315c48bde695706a25097, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.29
@@ -1246,6 +1219,10 @@ PrefabInstance:
     - target: {fileID: 6557431797558027218, guid: 4bc01d3f180315c48bde695706a25097, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6557431797765059750, guid: 4bc01d3f180315c48bde695706a25097, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7238764762369392240, guid: 4bc01d3f180315c48bde695706a25097, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1565,6 +1542,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6975293874840518064, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.000061035156
+      objectReference: {fileID: 0}
     - target: {fileID: 7972261828072502178, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
       propertyPath: m_text
       value: ' 800/800'
@@ -1834,4 +1815,3 @@ SceneRoots:
   - {fileID: 1174571392314226548}
   - {fileID: 4967787534350495860}
   - {fileID: 1165581310}
-  - {fileID: 438937239}

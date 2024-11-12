@@ -1,20 +1,20 @@
 using UnityEngine;
 using static Data;
+using static UnityEngine.GraphicsBuffer;
 
 public class Fireball : Weapon
 {
-    protected override void Start()
-    {
-        baseDamage = fireballDmg;
-        speed = 8f;
-        lifeTime = 5f;
-        cooldown = 10f;
-        base.Start();
-    }
+    [SerializeField] Rigidbody rb;
 
-    public override void Init(GameObject from, GameObject target)
+    protected override float baseDamage => fireballDmg;
+    protected override float speed => 20f;
+    protected override float lifeTime => 5f;
+    protected override float cooldown => 10f;
+
+    public override void Init(GameObject source, GameObject target)
     {
-        //Vector3 direction = (target.transform.position - transform.position).normalized;
-        //transform.position += direction * speed * Time.deltaTime;
+        base.Init(source, target);
+        Vector3 direction = (target.transform.position - transform.position).normalized;
+        rb.AddForce(direction * speed, ForceMode.Impulse);
     }
 }

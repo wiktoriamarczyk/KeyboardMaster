@@ -12,13 +12,14 @@ public class Combo : MonoBehaviour
     public static Action<int> onComboChanged;
 
     int comboCounter = 0;
-    float attackPower = 1f;
-    float pulseScale = 1.2f;
-    float pulseDuration = 0.3f;
-    float shakeMagnitude = 5f;
-    float shakeDuration = 0.1f;
     int shakeTweenId;
     int complementShakeTweenId;
+
+    const float attackPower = 1f;
+    const float pulseScale = 1.2f;
+    const float pulseDuration = 0.3f;
+    const float shakeMagnitude = 5f;
+    const float shakeDuration = 0.1f;
 
     enum ComboState
     {
@@ -69,18 +70,12 @@ public class Combo : MonoBehaviour
     {
         comboCounter = 0;
         onComboChanged?.Invoke(comboCounter);
-        attackPower = 1f;
         comboText.text = string.Empty;
         complementText.text = string.Empty;
         comboText.color = Color.white;
         comboText.rectTransform.localScale = Vector3.one;
         StopShake();
         StopShakeForComplementText();
-    }
-
-    public float GetCurrentAttackPower()
-    {
-        return attackPower;
     }
 
     void PulseText()

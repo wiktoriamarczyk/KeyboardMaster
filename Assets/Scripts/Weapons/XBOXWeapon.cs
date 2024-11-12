@@ -5,24 +5,21 @@ public class XBOXWeapon : Weapon
 {
     [SerializeField] Rigidbody rb;
 
+    protected override float baseDamage => xboxWeaponDmg;
+    protected override float speed => 20f;
+    protected override float lifeTime => 8f;
+    protected override float comboScaler => 0;
+
     const float bounceForce = 1f;
-
-    protected override void Start()
-    {
-        baseDamage = xboxWeaponDmg;
-        speed = 11f;
-        lifeTime = 8f;
-
-        base.Start();
-    }
 
     void OnCollisionEnter(Collision collision)
     {
         rb.AddForce(Vector3.up * bounceForce, ForceMode.Impulse);
     }
 
-    public override void Init(GameObject from, GameObject target)
+    public override void Init(GameObject source, GameObject target)
     {
+        base.Init(source, target);
         Vector3 direction = (target.transform.position - transform.position).normalized;
         rb.AddForce(direction * speed, ForceMode.Impulse);
     }
