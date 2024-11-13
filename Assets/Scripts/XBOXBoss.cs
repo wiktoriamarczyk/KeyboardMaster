@@ -7,7 +7,7 @@ public class XBOXBoss : Creature
     [SerializeField] XBOXWeapon     weapon;
     [SerializeField] GameObject     weaponHolder;
     [SerializeField] LookAtTarget   lookAtTarget;
-    [SerializeField] AudioManager   audioManager;
+    [SerializeField] AudioManager audioManager;
 
     GameObject weaponObject;
 
@@ -30,25 +30,24 @@ public class XBOXBoss : Creature
         }
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        var weaponComponent = collision.gameObject.GetComponent<Weapon>();
-        if (weaponComponent != null && weaponComponent.Source != gameObject)
-        {
-            GetHit();
-            UpdateHealth(-weaponComponent.Damage);
-            audioManager.PlayEnemyHitSound();
-
-            Debug.Log(string.Format("<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",
-              (byte)(Color.red.r * 255f), (byte)(Color.red.g * 255f), (byte)(Color.red.b * 255f),
-              $"DAMAGE to XBOX: {weaponComponent.Damage} - {weaponComponent.gameObject.name}"));
-            Debug.Log($"SOURCE: {weaponComponent.Source?.name} | init: {weaponComponent.initialized} ME: {gameObject}");
-        }
-    }
-
     void OnDestroy()
     {
         StopAllCoroutines();
+    }
+
+    protected override void GetHit()
+    {
+        base.GetHit();
+        audioManager.PlayEnemyHitSound();
+    }
+
+    public override void UpdateHealth(float value)
+    {
+        if (value < 0)
+        {
+            GetHit();
+        }
+        base.UpdateHealth(value);
     }
 
     protected override void Die()

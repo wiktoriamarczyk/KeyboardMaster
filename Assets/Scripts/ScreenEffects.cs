@@ -53,11 +53,9 @@ public class ScreenEffects : MonoBehaviour
             {
                 case (int)ScreenEffect.Shake:
                     StartCoroutine(ScreenShake());
-                    Debug.Log("Screen Shake");
                     break;
                 case (int)ScreenEffect.Blackout:
                     StartCoroutine(Blackout());
-                    Debug.Log("Blackout");
                     break;
             }
         }

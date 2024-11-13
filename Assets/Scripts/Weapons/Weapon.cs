@@ -14,34 +14,62 @@ public abstract class Weapon : MonoBehaviour
     protected virtual GameObject source { get; set; }
     protected virtual GameObject target { get; set; }
 
-    public float Damage => currentDamage;
     public float Cooldown => cooldown;
-    public GameObject Source => source;
 
     public bool initialized { get; private set; } = false;
+    bool causedDamage = false;
 
     const float animationDuration = 0.2f;
+    const float destroyTimeAfterCollision = 0.25f;
 
     protected void Start()
     {
         StartCoroutine(DestroyAfterTime());
-        Combo.onComboChanged += OnComboChanged;
         currentDamage = baseDamage;
+        Combo.onComboChanged += OnComboChanged;
         OnComboChanged(Combo.ComboCounter);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject == target)
-        {
-            Destroy();
-        }
+        CheckForCollisionWithCreature(collision.gameObject);
+    }
+
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        CheckForCollisionWithCreature(other.gameObject);
     }
 
     protected void OnDestroy()
     {
         Combo.onComboChanged -= OnComboChanged;
         StopAllCoroutines();
+    }
+
+    protected void OnComboChanged(int combo)
+    {
+        currentDamage = baseDamage + combo * comboScaler;
+        currentCombo = combo;
+    }
+
+    void CheckForCollisionWithCreature(GameObject go)
+    {
+        // quick and hacky way to prevent multiple hits
+        if (causedDamage)
+            return;
+
+        var creature = go.GetComponentInParent<Creature>();
+        // if this is creature and it spawned this weapon, don't hit it
+        if (creature != null && go != source)
+        {
+            creature.UpdateHealth(-currentDamage);
+            causedDamage = true;
+            Invoke("Destroy", destroyTimeAfterCollision);
+
+            Debug.Log(string.Format("<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",
+                    (byte)(Color.green.r * 255f), (byte)(Color.green.g * 255f), (byte)(Color.green.b * 255f),
+                    $"DMG to {creature.gameObject.name}: {currentDamage} - {gameObject.name}"));
+        }
     }
 
     IEnumerator DestroyAfterTime()
@@ -53,12 +81,6 @@ public abstract class Weapon : MonoBehaviour
     void Destroy()
     {
         transform.DOScale(0, animationDuration).OnComplete(() => Destroy(gameObject));
-    }
-
-    protected void OnComboChanged(int combo)
-    {
-        currentDamage = baseDamage + combo * comboScaler;
-        currentCombo = combo;
     }
 
     public virtual void Init(GameObject source, GameObject target)

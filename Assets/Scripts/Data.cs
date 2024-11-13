@@ -6,12 +6,12 @@ public static class Data
     public const string winSceneName = "WinTextScene";
 
     public const float playerHealth = 100f;
-    public const float xboxBossHealth = 800f;
+    public const float xboxBossHealth = 500f;
 
-    public const float xboxWeaponDmg = 10f;
+    public const float xboxWeaponDmg = 5f;
     public const float basicWeaponDmg = 1f;
-    public const float fireballDmg = 3f;
-    public const float lightningDmg = 5f;
+    public const float fireballDmg = 5f;
+    public const float lightningDmg = 10f;
 
     public enum AnimationState
     {

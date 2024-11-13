@@ -1,6 +1,8 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using Unity.Collections;
+using UnityEditor;
 using UnityEngine;
 using static Data;
 using static Timers;
@@ -41,26 +43,6 @@ public class Player : Creature
         InitializeCommands();
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (isImmune)
-        {
-            return;
-        }
-
-        var weapon = collision.gameObject.GetComponent<Weapon>();
-        if (weapon != null && weapon.Source != gameObject)
-        {
-            GetHit();
-            UpdateHealth(-weapon.Damage);
-            audioManager.PlayPlayerHitSound();
-
-            Debug.Log(string.Format("<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",
-            (byte)(Color.green.r * 255f), (byte)(Color.green.g * 255f), (byte)(Color.green.b * 255f),
-            $"DAMAGE to PLAYER: {weapon.Damage} - {weapon.gameObject.name}"));
-        }
-    }
-
     void OnDestroy()
     {
         CommandSet.RemoveCommand(animationStates[Data.AnimationState.RegularAttack]);
@@ -72,15 +54,24 @@ public class Player : Creature
         StopAllCoroutines();
     }
 
-    #region TriggerAnimations
-    public void BasicAttack()
+    public override void UpdateHealth(float value)
+    {
+        if (value < 0 && !isImmune)
+        {
+            GetHit();
+        }
+        base.UpdateHealth(value);
+    }
+
+    #region CommandFunctions
+    void BasicAttack()
     {
         animator.SetTrigger(animationStates[Data.AnimationState.RegularAttack]);
         InitWeapon(attackTypes.basicWeapon);
         audioManager.PlayBasicAttackSound();
     }
 
-    public void AttackFireball()
+    void AttackFireball()
     {
         if (timer.IsReady(TimerType.Fireball))
         {
@@ -91,7 +82,7 @@ public class Player : Creature
         }
     }
 
-    public void AttackLightning()
+    void AttackLightning()
     {
         if (timer.IsReady(TimerType.Light))
         {
@@ -101,8 +92,7 @@ public class Player : Creature
             timer.StartTimer(attackTypes.lightning.Cooldown, TimerType.Light);
         }
     }
-
-    public void Defend()
+    void Defend()
     {
         if (timer.IsReady(TimerType.Defend))
         {
@@ -113,7 +103,7 @@ public class Player : Creature
         }
     }
 
-    public void DrinkPotion()
+    void DrinkPotion()
     {
         if (timer.IsReady(TimerType.Drink))
         {
@@ -125,9 +115,23 @@ public class Player : Creature
     }
     #endregion
 
+    protected override void GetHit()
+    {
+        base.GetHit();
+        audioManager.PlayPlayerHitSound();
+    }
+
+    protected override void Die()
+    {
+        base.Die();
+        SceneController.Instance.SetGameResult(false);
+        StartCoroutine(LoadEndSceneAfterDelay(lossSceneName));
+    }
+
     void InitWeapon(Weapon weapon)
     {
         spawnedWeapon = Instantiate(weapon.gameObject, weaponHolder.transform.position, Quaternion.identity);
+        spawnedWeapon.transform.LookAt(Vector3.forward);
         spawnedWeapon.transform.parent = transform.parent;
         spawnedWeapon.name = weapon.name;
         spawnedWeapon.GetComponent<Weapon>().Init(gameObject, lookAtTarget.Target);
@@ -143,7 +147,7 @@ public class Player : Creature
         }
     }
 
-    private IEnumerator ImmunityCooldown()
+    IEnumerator ImmunityCooldown()
     {
         while (remainingImmunityTime > 0)
         {
@@ -162,7 +166,6 @@ public class Player : Creature
             return;
         }
 
-        GetHit();
         UpdateHealth(-onTextMissedPenalty * Mathf.Abs(score));
     }
 
@@ -179,12 +182,5 @@ public class Player : Creature
         CommandSet.AddCommand(animationStates[Data.AnimationState.AttackLightning], new() { AttackLightning });
         CommandSet.AddCommand(animationStates[Data.AnimationState.Defending], new() { Defend });
         CommandSet.AddCommand(animationStates[Data.AnimationState.DrinkingPotion], new() { DrinkPotion });
-    }
-
-    protected override void Die()
-    {
-        base.Die();
-        SceneController.Instance.SetGameResult(false);
-        StartCoroutine(LoadEndSceneAfterDelay(lossSceneName));
     }
 }

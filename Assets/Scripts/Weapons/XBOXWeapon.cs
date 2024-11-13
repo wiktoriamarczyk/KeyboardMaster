@@ -10,11 +10,12 @@ public class XBOXWeapon : Weapon
     protected override float lifeTime => 8f;
     protected override float comboScaler => 0;
 
-    const float bounceForce = 1f;
+    const float bounceForce = 2f;
 
-    void OnCollisionEnter(Collision collision)
+    protected override void OnCollisionEnter(Collision collision)
     {
         rb.AddForce(Vector3.up * bounceForce, ForceMode.Impulse);
+        base.OnCollisionEnter(collision);
     }
 
     public override void Init(GameObject source, GameObject target)

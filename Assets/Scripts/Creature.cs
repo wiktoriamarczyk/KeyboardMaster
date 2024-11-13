@@ -20,18 +20,7 @@ public class Creature : MonoBehaviour
         healthBar.SetMaxHealth(maxHealth);
     }
 
-    virtual protected void Die()
-    {
-        animator.ResetTrigger(animationStates[Data.AnimationState.GettingHit]);
-        animator.SetTrigger(animationStates[Data.AnimationState.Dying]);
-    }
-
-    virtual protected void GetHit()
-    {
-        animator.SetTrigger(animationStates[Data.AnimationState.GettingHit]);
-    }
-
-    virtual protected void UpdateHealth(float value)
+    virtual public void UpdateHealth(float value)
     {
         currentHealth += value;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
@@ -44,6 +33,17 @@ public class Creature : MonoBehaviour
             animator.ResetTrigger(animationStates[Data.AnimationState.GettingHit]);
             Die();
         }
+    }
+
+    virtual protected void Die()
+    {
+        animator.ResetTrigger(animationStates[Data.AnimationState.GettingHit]);
+        animator.SetTrigger(animationStates[Data.AnimationState.Dying]);
+    }
+
+    virtual protected void GetHit()
+    {
+        animator.SetTrigger(animationStates[Data.AnimationState.GettingHit]);
     }
 
     protected IEnumerator LoadEndSceneAfterDelay(string sceneName)

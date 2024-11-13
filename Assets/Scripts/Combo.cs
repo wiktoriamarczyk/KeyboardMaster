@@ -16,7 +16,6 @@ public class Combo : MonoBehaviour
     int shakeTweenId;
     int complementShakeTweenId;
 
-    const float attackPower = 1f;
     const float pulseScale = 1.2f;
     const float pulseDuration = 0.3f;
     const float shakeMagnitude = 5f;
