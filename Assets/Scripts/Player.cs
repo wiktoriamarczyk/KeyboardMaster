@@ -25,7 +25,6 @@ public class Player : Creature
     [SerializeField] GameObject     weaponHolder;
 
     [SerializeField] float immunityDuration = 5f;
-    [SerializeField, ReadOnly] float remainingImmunityTime = 0f;
     [SerializeField] float drinkingCooldown = 30f;
 
     GameObject spawnedWeapon;
@@ -56,7 +55,12 @@ public class Player : Creature
 
     public override void UpdateHealth(float value)
     {
-        if (value < 0 && !isImmune)
+        if (isImmune)
+        {
+            return;
+        }
+
+        if (value < 0)
         {
             GetHit();
         }
@@ -142,20 +146,13 @@ public class Player : Creature
         if (!isImmune)
         {
             isImmune = true;
-            remainingImmunityTime = immunityDuration;
             StartCoroutine(ImmunityCooldown());
         }
     }
 
     IEnumerator ImmunityCooldown()
     {
-        while (remainingImmunityTime > 0)
-        {
-            remainingImmunityTime -= Time.deltaTime;
-            yield return null;
-        }
-
-        remainingImmunityTime = 0;
+        yield return new WaitForSeconds(immunityDuration);
         isImmune = false;
     }
 

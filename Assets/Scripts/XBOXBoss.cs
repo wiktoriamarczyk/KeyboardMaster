@@ -7,7 +7,7 @@ public class XBOXBoss : Creature
     [SerializeField] XBOXWeapon     weapon;
     [SerializeField] GameObject     weaponHolder;
     [SerializeField] LookAtTarget   lookAtTarget;
-    [SerializeField] AudioManager audioManager;
+    [SerializeField] AudioManager   audioManager;
 
     GameObject weaponObject;
 

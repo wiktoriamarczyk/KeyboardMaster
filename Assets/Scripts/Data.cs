@@ -1,12 +1,14 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class Data
 {
     public const string lossSceneName = "EndScene";
     public const string winSceneName = "WinTextScene";
+    public const string lightningEffectTag = "lightning";
 
     public const float playerHealth = 100f;
-    public const float xboxBossHealth = 500f;
+    public const float xboxBossHealth = 400f;
 
     public const float xboxWeaponDmg = 5f;
     public const float basicWeaponDmg = 1f;
@@ -38,4 +40,19 @@ public static class Data
         { AnimationState.GettingHit, "get hit" },
         { AnimationState.Dying, "dead" }
     };
+
+   public static GameObject FindInactiveObjectWithTag(string tag)
+    {
+        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.CompareTag(tag) && obj.hideFlags == HideFlags.None)
+            {
+                return obj;
+            }
+        }
+
+        return null;
+    }
 }

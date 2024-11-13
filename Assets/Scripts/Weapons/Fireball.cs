@@ -7,7 +7,7 @@ public class Fireball : Weapon
     [SerializeField] Rigidbody rb;
 
     protected override float baseDamage => fireballDmg;
-    protected override float speed => 20f;
+    protected override float speed => 12f;
     protected override float lifeTime => 5f;
     protected override float cooldown => 10f;
 

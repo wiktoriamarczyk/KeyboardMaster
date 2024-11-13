@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class Weapon : MonoBehaviour
 {
+    [SerializeField] GameObject particleHitEffect;
+
     protected virtual float currentDamage { get; set; } = 0;
     protected virtual float baseDamage { get; set; } = 0;
     protected virtual float speed { get; set; } = 0;
@@ -21,6 +23,7 @@ public abstract class Weapon : MonoBehaviour
 
     const float animationDuration = 0.2f;
     const float destroyTimeAfterCollision = 0.25f;
+    const float hitParticlesScale = 0.25f;
 
     protected void Start()
     {
@@ -33,14 +36,16 @@ public abstract class Weapon : MonoBehaviour
     protected virtual void OnCollisionEnter(Collision collision)
     {
         CheckForCollisionWithCreature(collision.gameObject);
+        SpawnHitParticles(collision.contacts[0].point);
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
         CheckForCollisionWithCreature(other.gameObject);
+        SpawnHitParticles(other.ClosestPoint(transform.position));
     }
 
-    protected void OnDestroy()
+    protected virtual void OnDestroy()
     {
         Combo.onComboChanged -= OnComboChanged;
         StopAllCoroutines();
@@ -50,6 +55,16 @@ public abstract class Weapon : MonoBehaviour
     {
         currentDamage = baseDamage + combo * comboScaler;
         currentCombo = combo;
+    }
+
+    void SpawnHitParticles(Vector3 hitPoint)
+    {
+        if (particleHitEffect == null)
+            return;
+
+        var particles = Instantiate(particleHitEffect);
+        particles.transform.localScale = new Vector3(hitParticlesScale, hitParticlesScale, hitParticlesScale);
+        particles.transform.position = hitPoint;
     }
 
     void CheckForCollisionWithCreature(GameObject go)
@@ -78,7 +93,7 @@ public abstract class Weapon : MonoBehaviour
         Destroy();
     }
 
-    void Destroy()
+    protected virtual void Destroy()
     {
         transform.DOScale(0, animationDuration).OnComplete(() => Destroy(gameObject));
     }

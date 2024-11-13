@@ -220,4 +220,4 @@ MonoBehaviour:
   weaponHolder: {fileID: 7444440475833123077}
   immunityDuration: 5
   remainingImmunityTime: 0
-  drinkingCooldown: 30
+  drinkingCooldown: 20
