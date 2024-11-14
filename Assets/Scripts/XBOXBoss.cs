@@ -72,10 +72,13 @@ public class XBOXBoss : Creature
             weaponObject.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 
             yield return new WaitForSeconds(weaponThrowDuration);
-            weaponObject.transform.parent = transform.parent;
-            var weaponComponent = weaponObject.GetComponent<Weapon>();
-            weaponObject = null;
-            weaponComponent.Init(gameObject, lookAtTarget.Target);
+            if (weaponObject != null)
+            {
+                weaponObject.transform.parent = transform.parent;
+                var weaponComponent = weaponObject.GetComponent<Weapon>();
+                weaponObject = null;
+                weaponComponent.Init(gameObject, lookAtTarget.Target);
+            }
         }
     }
 }

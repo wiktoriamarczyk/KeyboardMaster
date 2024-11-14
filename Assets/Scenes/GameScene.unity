@@ -1344,19 +1344,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3210134009651729633, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
-      propertyPath: m_text
-      value: '1. attack
-
-        2. fireball
-
-        3. light
-
-        4. drink
-        potion
-
-        5. defend'
-      objectReference: {fileID: 0}
     - target: {fileID: 3688553227210824188, guid: dc992eeca62277642b2ba64c7d8bbead, type: 3}
       propertyPath: m_text
       value: 'XBOX Boss HP: '

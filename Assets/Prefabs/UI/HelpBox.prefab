@@ -435,7 +435,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "1. fireball\n2. light \n3. defend"
+  m_text: '1. "attack" (basic attack)
+
+    2. "fire" (fireball attack)
+
+    3. "light"
+    (lightning attack)
+
+    4. "defend" (temp. immunity)
+
+    5. "life" (drink healing
+    potion)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5adb1e97383f77747beda809b74183ad, type: 2}
   m_sharedMaterial: {fileID: 8139600726996652436, guid: 5adb1e97383f77747beda809b74183ad, type: 2}
@@ -462,8 +472,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

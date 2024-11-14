@@ -27,6 +27,7 @@ public class TextFollower : MonoBehaviour
     {
         LoadTextFromFile(wordsFile);
         currentText = textDisplay.text = targetText;
+        textDisplay.text = textDisplay.text.Replace(' ', '_');
     }
 
     void Update()
@@ -99,6 +100,7 @@ public class TextFollower : MonoBehaviour
             currentLetterIndex++;
             string newText = targetText.Substring(currentLetterIndex);
             textDisplay.text = currentText = newText;
+            textDisplay.text = textDisplay.text.Replace(' ', '_');
             letterTimer = 0f;
         }
     }

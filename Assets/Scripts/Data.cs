@@ -33,10 +33,10 @@ public static class Data
     {
         { AnimationState.Idle, "idle" },
         { AnimationState.RegularAttack, "attack" },
-        { AnimationState.AttackFireball, "fireball" },
+        { AnimationState.AttackFireball, "fire" },
         { AnimationState.AttackLightning, "light" },
         { AnimationState.Defending, "defend" },
-        { AnimationState.DrinkingPotion, "drink potion" },
+        { AnimationState.DrinkingPotion, "life" },
         { AnimationState.GettingHit, "get hit" },
         { AnimationState.Dying, "dead" }
     };
