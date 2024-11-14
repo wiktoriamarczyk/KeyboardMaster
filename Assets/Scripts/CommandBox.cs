@@ -8,6 +8,11 @@ public class CommandBox : MonoBehaviour
 
     void Update()
     {
+        if (inputFieldActivator.IsActivated && Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            commandBoxInputField.text = string.Empty;
+        }
+
         if (inputFieldActivator.IsActivated && Input.GetKeyDown(KeyCode.Return))
         {
             CommandSet.ExecuteCommand(commandBoxInputField.text.ToLower());

@@ -99,7 +99,7 @@ public class TextCrawler : MonoBehaviour
         if (currentSceneName == "TestSceneJulia")
         {
             delay = 33f; // Na przyk³ad 20 sekund dla "Scene1"
-            nextSceneName = "SampleScene";
+            nextSceneName = "GameScene";
         }
         else if (currentSceneName == "WinTextScene")
         {
@@ -109,7 +109,7 @@ public class TextCrawler : MonoBehaviour
         else
         {
             delay = 33f; // Domyœlne opóŸnienie dla innych scen
-            nextSceneName = "SampleScene";
+            nextSceneName = "GameScene";
         }
 
         // Czekaj przez okreœlony czas
