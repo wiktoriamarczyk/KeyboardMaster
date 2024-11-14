@@ -23,6 +23,8 @@ public class Player : Creature
     [SerializeField] AttackTypes    attackTypes;
     [SerializeField] LookAtTarget   lookAtTarget;
     [SerializeField] GameObject     weaponHolder;
+    [SerializeField] GameObject     healingEffectParticles;
+    [SerializeField] GameObject     defendEffectParticles;
 
     [SerializeField] float immunityDuration = 5f;
     [SerializeField] float drinkingCooldown = 30f;
@@ -100,6 +102,9 @@ public class Player : Creature
     {
         if (timer.IsReady(TimerType.Defend))
         {
+            var particles = Instantiate(defendEffectParticles);
+            particles.transform.position = transform.position;
+
             animator.SetTrigger(animationStates[Data.AnimationState.Defending]);
             ActivateImmunity();
             audioManager.PlayPlayerDefenseSound();
@@ -111,6 +116,9 @@ public class Player : Creature
     {
         if (timer.IsReady(TimerType.Drink))
         {
+            var particles = Instantiate(healingEffectParticles);
+            particles.transform.position = transform.position;
+
             animator.SetTrigger(animationStates[Data.AnimationState.DrinkingPotion]);
             audioManager.PlayPlayerDrinkSound();
             Heal(potionHealingAmount);

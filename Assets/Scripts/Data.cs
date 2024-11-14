@@ -11,9 +11,9 @@ public static class Data
     public const float xboxBossHealth = 400f;
 
     public const float xboxWeaponDmg = 5f;
-    public const float basicWeaponDmg = 1f;
-    public const float fireballDmg = 5f;
-    public const float lightningDmg = 10f;
+    public const float basicWeaponDmg = 5f;
+    public const float fireballDmg = 10f;
+    public const float lightningDmg = 20f;
 
     public enum AnimationState
     {

@@ -218,6 +218,7 @@ MonoBehaviour:
     lightning: {fileID: 4549050675582541375, guid: 72c5993887ec3604ea8bde8029768b39, type: 3}
   lookAtTarget: {fileID: 1972545584047766830}
   weaponHolder: {fileID: 7444440475833123077}
+  healingEffectParticles: {fileID: 4664559355263968134, guid: 38bd641c6f3a997428c0f4fd71c0f20e, type: 3}
+  defendEffectParticles: {fileID: 6628942230489849294, guid: c4bf53d8d230500429048bc1aabef20a, type: 3}
   immunityDuration: 5
-  remainingImmunityTime: 0
   drinkingCooldown: 20
