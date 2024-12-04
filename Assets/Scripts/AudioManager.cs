@@ -9,15 +9,15 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private List<AudioClip> musicClips;
 
     // DŸwiêki bohatera
-    [SerializeField] private AudioClip basicAttackSound;        // DŸwiêk podstawowego ataku
-    [SerializeField] private AudioClip fireballAttackSound;     // DŸwiêk ataku kul¹ ognia
-    [SerializeField] private AudioClip lightningAttackSound;    // DŸwiêk ataku b³yskawic¹
-    [SerializeField] private AudioClip playerHitSound;          // DŸwiêk obra¿eñ bohatera
+    [SerializeField] private AudioClip basicAttackSound;
+    [SerializeField] private AudioClip fireballAttackSound;
+    [SerializeField] private AudioClip lightningAttackSound;
+    [SerializeField] private AudioClip playerHitSound;
     [SerializeField] private AudioClip playerDrinkSound;
     [SerializeField] private AudioClip playerDefenseSound;
 
     // DŸwiêki przeciwnika
-    [SerializeField] private AudioClip enemyAttackSound;        // DŸwiêk ataku przeciwnika
+    [SerializeField] private AudioClip enemyAttackSound;
     [SerializeField] private AudioClip enemyHitSound;
 
     [SerializeField] private float fadeDuration = 1.5f;
@@ -209,7 +209,7 @@ public class AudioManager : MonoBehaviour
 
     private IEnumerator PlaySoundWithDelay(AudioClip clip, float delay)
     {
-        yield return new WaitForSeconds(delay); 
+        yield return new WaitForSeconds(delay);
         sfxSource.PlayOneShot(clip);
     }
 }

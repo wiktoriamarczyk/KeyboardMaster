@@ -1,16 +1,21 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public static class Data
 {
+    public const string introSceneName = "IntroScene";
+    public const string gameSceneName = "GameScene";
     public const string lossSceneName = "EndScene";
     public const string winSceneName = "WinTextScene";
+
+    public const string pausePanelTag = "pausePanel";
     public const string lightningEffectTag = "lightning";
 
     public const float playerHealth = 100f;
     public const float xboxBossHealth = 400f;
 
-    public const float xboxWeaponDmg = 5f;
+    public const float xboxWeaponDmg = 2f;
     public const float basicWeaponDmg = 5f;
     public const float fireballDmg = 10f;
     public const float lightningDmg = 20f;

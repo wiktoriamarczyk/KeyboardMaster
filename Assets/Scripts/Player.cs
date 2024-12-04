@@ -1,8 +1,5 @@
-using DG.Tweening;
 using System;
 using System.Collections;
-using Unity.Collections;
-using UnityEditor;
 using UnityEngine;
 using static Data;
 using static Timers;
@@ -33,7 +30,7 @@ public class Player : Creature
 
     bool isImmune = false;
 
-    const float onTextMissedPenalty = 2;
+    const float onTextMissedPenalty = 0.5f;
     const float potionHealingAmount = 50f;
 
     override protected void Start()
